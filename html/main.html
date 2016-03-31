@@ -39,16 +39,20 @@
         <!--左栏-->
         <div class="col-sm-3">
 
-            <h4> activeCaseId:{{activeCaseId}} </h4>
+            <h4>isActive:{{isActive}}</h4>
+            <h4> activeCase.id:{{activeCase.caseId}} </h4>
             <h4> showCase.id:{{showCase.caseId}} </h4>
+            <div>
+                <button class="btn btn-danger" ng-click="disActivate()">停止生效</button>
+                <button class="btn btn-success" ng-click="newCase()">新 case</button>
+            </div>
             <div class="row">
                 <div class="card card-block col-sm-5 m-l-1"
                      ng-repeat="case in cases"
                      ng-click="changeCaseId(case)">
-                    <h5 class="card-title">{{case.name}}</h5>
-                    <p class="card-text">
-                    </p>
-                    <a href="#" class="card-link">激活</a>
+                    <!--<h5 class="card-title">{{case.name}}</h5>-->
+                    <p class="card-text">{{case.name}} </p>
+                    <a href="#" class="card-link" ng-click="activate(case)">激活</a>
                     <a href="#" class="card-link">删除</a>
                 </div>
             </div>

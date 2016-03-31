@@ -21,7 +21,7 @@ angular.module('mainCtrl', [])
                 //force refresh
                 $scope.$apply();
             });
-        };
+        }
 
         $scope.changeCaseId = function (c) {
             $scope.showCase = c;

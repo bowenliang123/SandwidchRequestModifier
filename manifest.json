@@ -21,7 +21,7 @@
   "omnibox": {
     "keyword": "Requester"
   },
-  "options_page": "html/options.html",
+  "options_page": "html/main.html",
   "background": {
     "scripts": [
       "js/background.js"

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+    <meta charset="UTF-8">
+    <title>Requester Options Page</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.min.css">
+
+    <!--fontawesome css-->
+    <link rel="stylesheet" href="../bower_components/font-awesome/css/font-awesome.min.css">
+
+    <!--app css-->
+    <!--<link rel="stylesheet" href="../css/main.css">-->
+
+
+    <!-- jQuery first, then Bootstrap JS. -->
+    <script src="../bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+
+    <!-- angular v1 -->
+    <script src="../bower_components/angular/angular.min.js"></script>
+
+    <!--lib-->
+
+    <!--angular app-->
+    <script src="../js/app.js"></script>
+    <script src="../js/mainCtrl.js"></script>
+
+    <!--app-->
+</head>
+
+<body ng-controller="mainCtrl">
+
+
+<div class="container-fluid">
+
+    <div class="row m-y-1">
+        <!--左栏-->
+        <div class="col-sm-3">
+
+            <h4> activeCaseId:{{activeCaseId}} </h4>
+            <h4> showCase.id:{{showCase.caseId}} </h4>
+            <div class="row">
+                <div class="card card-block col-sm-5 m-l-1"
+                     ng-repeat="case in cases"
+                     ng-click="changeCaseId(case)">
+                    <h5 class="card-title">{{case.name}}</h5>
+                    <p class="card-text">
+                    </p>
+                    <a href="#" class="card-link">激活</a>
+                    <a href="#" class="card-link">删除</a>
+                </div>
+            </div>
+        </div>
+
+        <!--中栏-->
+        <div class="col-sm-9">
+            <!--UA-->
+            <fieldset class="form-group">
+                <label for="uaTextarea">User Agent</label>
+                <textarea class="form-control" id="uaTextarea" rows="2"
+                          placeholder="use brower user agent string by default"
+                          ng-model="showCase.ua"></textarea>
+            </fieldset>
+
+            <!--headers-->
+            <fieldset class="form-group">
+                <label for="headersTextarea">Headers</label>
+                <textarea class="form-control" id="headersTextarea" rows="3"
+                          placeholder="key:value"
+                          ng-model="showCase.headers"></textarea>
+            </fieldset>
+
+            <!--params-->
+            <fieldset class="form-group">
+                <label for="headersTextarea">Params</label>
+                <textarea class="form-control" id="paramsTextarea" rows="3"
+                          placeholder="key:value"
+                          ng-model="showCase.params"></textarea>
+            </fieldset>
+
+        </div>
+
+        <!--右栏-->
+        <!--<div class="col-sm-3">-->
+        <!--right-->
+        <!--</div>-->
+    </div>
+</div>
+
+</body>
+</html>

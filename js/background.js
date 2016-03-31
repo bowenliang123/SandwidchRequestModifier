@@ -9,7 +9,7 @@ console.log('background.js');
 // 监听 Browser Actions 按钮点击事件
 chrome.browserAction.onClicked.addListener(function (tab) {
     //打开选项页
-    chrome.tabs.create({'url': chrome.extension.getURL('html/options.html')}, function (tab) {
+    chrome.tabs.create({'url': chrome.extension.getURL('html/main.html')}, function (tab) {
     });
 });
 
@@ -17,12 +17,11 @@ chrome.browserAction.onClicked.addListener(function (tab) {
 //https://developer.chrome.com/extensions/webRequest#event-onBeforeRequest
 chrome.webRequest.onBeforeRequest.addListener(
     function (details) {
-
+        console.log(details);
         //检查 URL 参数并加入
         //if (details.url.indexOf('#34567') < 0) {
         //    return {redirectUrl: details.url + '#34567'}
         //}
-        return details;
     },
     {urls: ["<all_urls>"]},
     ["blocking"]);

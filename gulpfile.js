@@ -28,8 +28,6 @@ gulp.task('copyBower', ['clean'], ()=> {
             //jquery
             'bower_components/jquery/dist/**/*',
 
-            //qrcode.js
-            'bower_components/qrcode.js/qrcode.js',
         ], {"base": "."})
         .pipe(gulp.dest('dist/'));
 });

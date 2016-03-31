@@ -1,13 +1,13 @@
 {
-  "name": "quico",
+  "name": "Requester",
   "authors": [
     "梁博文 <bowen.liang.123@gmail.com>"
   ],
-  "description": "The best QRCode tools designed for developers",
+  "description": "a chrome extension for modifying headers, parameters, user agents and etc.",
   "main": "",
   "moduleType": [],
   "keywords": [
-    "qrcode"
+    "Requester"
   ],
   "license": "MIT",
   "homepage": "",
@@ -20,7 +20,6 @@
     "tests"
   ],
   "dependencies": {
-    "qrcode.js": "qrcode-js#*",
     "bootstrap": "v4.0.0-alpha.2",
     "font-awesome": "fontawesome#^4.5.0",
     "angular": "^1.5.4"

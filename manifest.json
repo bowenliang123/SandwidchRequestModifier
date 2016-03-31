@@ -1,0 +1,26 @@
+{
+  "name": "Requester",
+  "version": "0.0.1",
+  "description": "a chrome extension for modifying headers, parameters, user agents and etc.",
+  "manifest_version": 2,
+  "content_security_policy": "script-src 'self' 'unsafe-eval' https://ssl.google-analytics.com; object-src 'self'",
+  "icons": {
+    "16": "img/r.png",
+    "48": "img/r.png",
+    "128": "img/r.png"
+  },
+  "permissions": [
+    "tabs",
+    "storage",
+    "bookmarks",
+    "contextMenus"
+  ],
+  "omnibox": {
+    "keyword": "Requester"
+  },
+  "background": {
+    "scripts": [
+      "js/background.js"
+    ]
+  }
+}

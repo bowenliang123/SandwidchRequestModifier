@@ -1,25 +1,23 @@
 {
-  "name": "quico",
+  "name": "Requester",
   "version": "1.0.0",
-  "description": "Productive QR code toolkit with efficiency and elegance, just feeling it on the fly. More than a QR code generator.快码二维,疾行如风.",
+  "description": "a chrome extension for modifying headers, parameters, user agents and etc.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://bowenliang123@bitbucket.org/bowenliang123/quico.git"
+    "url": "git+https://github.com/bowenliang123/Requester.git"
   },
   "keywords": [
-    "qrcode",
-    "quico",
-    "generator",
-    "encode",
-    "decode"
+    "requester",
+    "chrome",
+    "extension"
   ],
   "author": "Bowen Liang",
   "license": "ISC",
-  "homepage": "https://bitbucket.org/bowenliang123/quico#readme",
+  "homepage": "https://github.com/bowenliang123/Requester#readme",
   "devDependencies": {
     "gulp": "^3.9.1",
     "gulp-clean": "^0.3.2",

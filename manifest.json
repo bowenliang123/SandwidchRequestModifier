@@ -13,7 +13,10 @@
     "tabs",
     "storage",
     "bookmarks",
-    "contextMenus"
+    "contextMenus",
+    "<all_urls>",
+    "webRequest",
+    "webRequestBlocking"
   ],
   "omnibox": {
     "keyword": "Requester"
@@ -23,5 +26,8 @@
     "scripts": [
       "js/background.js"
     ]
+  },
+  "browser_action": {
+    "default_title": "Requester"
   }
 }

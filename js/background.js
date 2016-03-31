@@ -35,6 +35,7 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
         console.log(details);
 
         modifyHeaders(details);
+        modifyUserAgent(details);
 
         return {requestHeaders: details.requestHeaders};
     },
@@ -106,23 +107,22 @@ function activateCase(caseStr) {
 }
 
 function modifyHeaders(details) {
-    //准备自定义header
-    let modHeadersStr = activeCase.headers;
-    console.log(modHeadersStr);
-    if (!modHeadersStr || modHeadersStr.indexOf(':') < 0) {
+    if (!activeCase || !activeCase.headers) {
         return;
     }
 
-    let modHeaderLines = modHeadersStr.split('\n');
+    //准备自定义header
+    let modHeaderLines = activeCase.headers.split('\n');
     if (!modHeaderLines || modHeaderLines.length < 1) {
         return;
     }
+
     let customHeaders = {};
     modHeaderLines.forEach((modHeaderStr)=> {
-        if(!modHeaderStr||modHeaderStr.indexOf(':')<0){
+        if (!modHeaderStr || modHeaderStr.indexOf(':') < 0) {
             return;
         }
-        
+
         let headerKeyValue = modHeaderStr.split(':');
         if (headerKeyValue && headerKeyValue.length == 2) {
             //加入自定义header
@@ -132,5 +132,20 @@ function modifyHeaders(details) {
 
     //增加到请求的 header
     appendHeaders(details.requestHeaders, customHeaders);
+}
 
+
+function modifyUserAgent(details) {
+    if (!activeCase || !activeCase.ua) {
+        return;
+    }
+
+    details.requestHeaders.forEach((requestHeader)=> {
+        let headerName = requestHeader.name.toLowerCase();
+        if (!headerName || headerName.indexOf('user') < 0 || headerName.indexOf('agent') < 0) {
+            return;
+        }
+
+        requestHeader.value = activeCase.ua;
+    });
 }

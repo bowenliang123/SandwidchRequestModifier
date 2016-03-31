@@ -1,0 +1,29 @@
+{
+  "name": "quico",
+  "version": "1.0.0",
+  "description": "Productive QR code toolkit with efficiency and elegance, just feeling it on the fly. More than a QR code generator.快码二维,疾行如风.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://bowenliang123@bitbucket.org/bowenliang123/quico.git"
+  },
+  "keywords": [
+    "qrcode",
+    "quico",
+    "generator",
+    "encode",
+    "decode"
+  ],
+  "author": "Bowen Liang",
+  "license": "ISC",
+  "homepage": "https://bitbucket.org/bowenliang123/quico#readme",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-clean": "^0.3.2",
+    "gulp-copy": "0.0.2",
+    "gulp-zip": "^3.2.0"
+  }
+}

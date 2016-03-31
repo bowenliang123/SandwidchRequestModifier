@@ -13,8 +13,23 @@ chrome.browserAction.onClicked.addListener(function (tab) {
     });
 });
 
+//监听所有请求，header发出前对请求进行修改
+//https://developer.chrome.com/extensions/webRequest#event-onBeforeRequest
+chrome.webRequest.onBeforeRequest.addListener(
+    function (details) {
 
-//监听所有请求，发出前对请求进行修改
+        //检查 URL 参数并加入
+        //if (details.url.indexOf('#34567') < 0) {
+        //    return {redirectUrl: details.url + '#34567'}
+        //}
+        return details;
+    },
+    {urls: ["<all_urls>"]},
+    ["blocking"]);
+
+
+//监听所有请求，header发出前对请求进行修改
+//https://developer.chrome.com/extensions/webRequest#event-onBeforeSendHeaders
 chrome.webRequest.onBeforeSendHeaders.addListener(
     function (details) {
         //增加header

@@ -34,8 +34,7 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
     function (details) {
         console.log(details);
 
-        //增加header
-        addHeaders(details.requestHeaders, {aaaaa: 'bowen'});
+        modifyHeaders(details);
 
         return {requestHeaders: details.requestHeaders};
     },
@@ -52,18 +51,27 @@ chrome.extension.onRequest.addListener(
         }
         else if (request.action == "saveAllCases") {
             saveAllCases(request.casesStr);
+        } else if (request.action == "activateCase") {
+            activateCase(request.caseStr);
         }
         else
             sendResponse({}); // snub them.
     });
 
-function addHeaders(requestHeaders, additionalHeaders) {
+function appendHeaders(requestHeaders, additionalHeaders) {
+    if (!additionalHeaders || additionalHeaders.length < 1) {
+        return;
+    }
+
+    //遍历自定义headers
     let keys = Object.keys(additionalHeaders);
     keys.forEach((key)=> {
+        //添加到真正的header
         requestHeaders.push({name: key, value: additionalHeaders[key]});
     })
 }
 
+let activeCase;
 let allCases = [
     {
         caseId: 0,
@@ -81,7 +89,7 @@ let allCases = [
         caseId: 2,
         name: 'Weibo',
         ua: 'Mozilla/5.0 (Linux; U; Android 4.0.4; zh-cn; HTC Sensation XE with Beats Audio Z715e Build/IML74K) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30',
-        headers: "headerKey:headerValue2"
+        headers: "key1:value1\nkey2:value2"
     }
 ];
 function getAllCases() {
@@ -90,4 +98,39 @@ function getAllCases() {
 
 function saveAllCases(casesStr) {
     allCases = JSON.parse(casesStr);
+}
+
+function activateCase(caseStr) {
+    activeCase = JSON.parse(caseStr);
+    console.log(activeCase);
+}
+
+function modifyHeaders(details) {
+    //准备自定义header
+    let modHeadersStr = activeCase.headers;
+    console.log(modHeadersStr);
+    if (!modHeadersStr || modHeadersStr.indexOf(':') < 0) {
+        return;
+    }
+
+    let modHeaderLines = modHeadersStr.split('\n');
+    if (!modHeaderLines || modHeaderLines.length < 1) {
+        return;
+    }
+    let customHeaders = {};
+    modHeaderLines.forEach((modHeaderStr)=> {
+        if(!modHeaderStr||modHeaderStr.indexOf(':')<0){
+            return;
+        }
+        
+        let headerKeyValue = modHeaderStr.split(':');
+        if (headerKeyValue && headerKeyValue.length == 2) {
+            //加入自定义header
+            customHeaders[headerKeyValue[0]] = headerKeyValue[1].concat();
+        }
+    });
+
+    //增加到请求的 header
+    appendHeaders(details.requestHeaders, customHeaders);
+
 }

@@ -2,7 +2,11 @@
  * Created by bowen on 16/3/12.
  */
 'use strict';
-
+function activateCase(oneCase) {
+    chrome.browserAction.setBadgeText({text: oneCase.name});
+    chrome.extension.sendRequest({action: "activateCase", caseStr: angular.toJson(oneCase)}, (response) => {
+    })
+}
 angular.module('mainCtrl', [])
     .controller('mainCtrl', ($scope) => {
         $scope.cases = [];
@@ -30,7 +34,7 @@ angular.module('mainCtrl', [])
         $scope.activate = function (c) {
             $scope.isActive = true;
             $scope.activeCase = c;
-            chrome.browserAction.setBadgeText({text: $scope.activeCase.name});
+            activateCase($scope.activeCase);
         };
 
         $scope.disActivate = function () {
@@ -48,12 +52,17 @@ angular.module('mainCtrl', [])
             $scope.cases.push({
                 caseId: new Date().getTime(),
                 name: newCaseName
-            })
-
-            chrome.extension.sendRequest({
-                action: "saveAllCases",
-                casesStr: angular.toJson($scope.cases)  //序列化
-            }, (response) => {
             });
+
+            persistAllCases($scope);
         }
     });
+
+//持久化数据到后台
+function persistAllCases($scope) {
+    chrome.extension.sendRequest({
+        action: "saveAllCases",
+        casesStr: angular.toJson($scope.cases)  //序列化
+    }, (response) => {
+    });
+}

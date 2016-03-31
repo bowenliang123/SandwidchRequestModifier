@@ -13,7 +13,7 @@ angular.module('mainCtrl', [])
 
         init();
 
-        function init (){
+        function init() {
             chrome.extension.sendRequest({action: "getAllCases"}, (response) => {
                 console.log(response);
                 $scope.cases = response.cases;
@@ -49,5 +49,11 @@ angular.module('mainCtrl', [])
                 caseId: new Date().getTime(),
                 name: newCaseName
             })
+
+            chrome.extension.sendRequest({
+                action: "saveAllCases",
+                casesStr: angular.toJson($scope.cases)  //序列化
+            }, (response) => {
+            });
         }
     });

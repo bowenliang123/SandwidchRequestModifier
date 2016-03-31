@@ -48,11 +48,11 @@
             </div>
             <div class="row">
                 <div class="card card-block col-sm-5 m-l-1"
-                     ng-repeat="case in cases"
-                     ng-click="changeCaseId(case)">
-                    <!--<h5 class="card-title">{{case.name}}</h5>-->
-                    <p class="card-text">{{case.name}} </p>
-                    <a href="#" class="card-link" ng-click="activate(case)">激活</a>
+                     ng-repeat="onecase in cases"
+                     ng-click="changeCaseId(onecase)">
+                    <!--<h5 class="card-title">{{onecase.name}}</h5>-->
+                    <p class="card-text">{{onecase.name}} </p>
+                    <a href="#" class="card-link" ng-click="activate(onecase)">激活</a>
                     <a href="#" class="card-link">删除</a>
                 </div>
             </div>

@@ -53,11 +53,11 @@ angular.module('mainCtrl', [])
             });
         }
 
-        $scope.changeCaseId = function (simCase) {
+        $scope.changeCaseId = (simCase)=> {
             $scope.showCase = simCase;
         };
 
-        $scope.activate = function (simCase) {
+        $scope.activate = (simCase) => {
             //update local
             $scope.activeCase = simCase;
 
@@ -66,7 +66,7 @@ angular.module('mainCtrl', [])
             })
         };
 
-        $scope.deActivate = function () {
+        $scope.deActivate = ()=> {
             //update local
             $scope.activeCase = undefined;
 
@@ -75,7 +75,10 @@ angular.module('mainCtrl', [])
             })
         };
 
-        $scope.createNewCase = function () {
+        $scope.remove = (simCase)=> {
+        };
+
+        $scope.createNewCase =  () =>{
             var newCaseName = prompt('输入新建case名称', '');
             if (!newCaseName) {
                 alert('呃…名称不能为空啊');

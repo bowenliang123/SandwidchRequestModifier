@@ -33,28 +33,32 @@
 <body ng-controller="mainCtrl">
 
 
-<div class="container-fluid">
+<div class="container m-t-1">
+
+    <!--导航栏-->
+    <nav class="navbar navbar-light bg-faded">
+        <div class="nav navbar-nav">
+            <a class="nav-item nav-link active" href="#">REQUESTER <span class="sr-only">(current)</span></a>
+            <a class="nav-item nav-link" href="#">isActive:{{activeCase!=undefined}}</a>
+            <a class="nav-item nav-link" href="#">activeCase.id:{{activeCase.caseId}} </a>
+            <a class="nav-item nav-link" href="#">showCase.id:{{showCase.caseId}} </a>
+        </div>
+        <form class="form-inline pull-xs-right">
+            <button class="btn btn-danger" ng-click="deActivate()" ng-disabled="activeCase==undefined">停止生效</button>
+            <button class="btn btn-success" ng-click="createNewCase()">新 case</button>
+        </form>
+    </nav>
 
     <div class="row m-y-1">
         <!--左栏-->
         <div class="col-sm-3">
 
-            <h4>isActive:{{activeCase!=undefined}}</h4>
-            <h4> activeCase.id:{{activeCase.caseId}} </h4>
-            <h4> showCase.id:{{showCase.caseId}} </h4>
-            <div>
-                <button class="btn btn-danger" ng-click="deActivate()">停止生效</button>
-                <button class="btn btn-success" ng-click="createNewCase()">新 case</button>
-            </div>
-            <div class="row">
-                <div class="card card-block col-sm-5 m-l-1"
-                     ng-repeat="onecase in cases"
-                     ng-click="changeCaseId(onecase)">
-                    <!--<h5 class="card-title">{{onecase.name}}</h5>-->
-                    <p class="card-text">{{onecase.name}} </p>
-                    <a href="#" class="card-link" ng-click="activate(onecase)">激活</a>
-                    <a href="#" class="card-link">删除</a>
-                </div>
+            <div class="row"
+                 ng-repeat="onecase in cases"
+                 ng-click="changeCaseId(onecase)">
+                <p>{{onecase.name}} </p>
+                <div ng-click="activate(onecase)">激活</div>
+                <div ng-click="remove(onecase)">删除</div>
             </div>
         </div>
 

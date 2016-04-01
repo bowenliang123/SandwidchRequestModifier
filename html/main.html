@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="../bower_components/font-awesome/css/font-awesome.min.css">
 
     <!--app css-->
-    <!--<link rel="stylesheet" href="../css/main.css">-->
+    <link rel="stylesheet" href="../css/main.css">
 
 
     <!-- jQuery first, then Bootstrap JS. -->
@@ -53,12 +53,14 @@
         <!--左栏-->
         <div class="col-sm-3">
 
-            <div class="row"
+            <div class="row simCase"
                  ng-repeat="onecase in cases"
                  ng-click="changeCaseId(onecase)">
-                <p>{{onecase.name}} </p>
-                <div ng-click="activate(onecase)">激活</div>
-                <div ng-click="remove(onecase)">删除</div>
+                <div class="col-sm-6">
+                    <p>{{onecase.name}} </p>
+                </div>
+                <div class="col-sm-3" ng-click="activate(onecase)">激活</div>
+                <div class="col-sm-3" ng-click="remove(onecase)">删除</div>
             </div>
         </div>
 

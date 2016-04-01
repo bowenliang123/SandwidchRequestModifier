@@ -2,10 +2,7 @@
  * Created by bowen on 16/3/12.
  */
 'use strict';
-function activateCase(oneCase) {
-    chrome.extension.sendRequest({action: "activateCase", caseStr: angular.toJson(oneCase)}, (response) => {
-    })
-}
+
 angular.module('mainCtrl', [])
     .controller('mainCtrl', ($scope) => {
         $scope.cases = [];
@@ -34,6 +31,8 @@ angular.module('mainCtrl', [])
             $scope.isActive = true;
             $scope.activeCase = c;
             activateCase($scope.activeCase);
+            chrome.extension.sendRequest({action: "activateCase", caseStr: angular.toJson(oneCase)}, (response) => {
+            })
         };
 
         $scope.deActivate = function () {
@@ -57,7 +56,8 @@ angular.module('mainCtrl', [])
             //持久化用例
             persistAllCases($scope);
         }
-    });
+    })
+;
 
 //持久化所有用例数据到后台
 function persistAllCases($scope) {

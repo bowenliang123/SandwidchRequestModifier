@@ -123,7 +123,7 @@ function activateCase(caseStr) {
     chrome.browserAction.setBadgeText({text: activeCase.name});
 
     //清除 browser action title
-    chrome.browserAction.setTitle({title: 'Simulating: '+activeCase.name});
+    chrome.browserAction.setTitle({title: `Name:  ${activeCase.name}\n\nUser Agent:\n${activeCase.ua}\n\nHeaders:\n${activeCase.headers}`});
 }
 
 function deactivateCase() {

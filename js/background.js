@@ -32,7 +32,7 @@ chrome.webRequest.onBeforeRequest.addListener(
 //https://developer.chrome.com/extensions/webRequest#event-onBeforeSendHeaders
 chrome.webRequest.onBeforeSendHeaders.addListener(
     function (details) {
-        console.log(details);
+        //console.log(details);
 
         modifyHeaders(details);
         modifyUserAgent(details);
@@ -47,14 +47,21 @@ chrome.extension.onRequest.addListener(
     function (request, sender, sendResponse) {
         if (request.action == "getAllCases") {
             var allCases = getAllCases();
-            console.log(allCases);
             sendResponse({cases: allCases});
         }
+
         else if (request.action == "saveAllCases") {
             saveAllCases(request.casesStr);
-        } else if (request.action == "activateCase") {
+        }
+
+        else if (request.action == "activateCase") {
             activateCase(request.caseStr);
         }
+
+        else if (request.action == "deactivateCase") {
+            deactivateCase(request.caseStr);
+        }
+
         else
             sendResponse({}); // snub them.
     });
@@ -103,7 +110,16 @@ function saveAllCases(casesStr) {
 
 function activateCase(caseStr) {
     activeCase = JSON.parse(caseStr);
-    console.log(activeCase);
+
+    //设置 badge 文本
+    chrome.browserAction.setBadgeText({text: activeCase.name});
+}
+
+function deactivateCase() {
+    activeCase = undefined;
+
+    //清除 badge 文本
+    chrome.browserAction.setBadgeText({text: ''});
 }
 
 function modifyHeaders(details) {

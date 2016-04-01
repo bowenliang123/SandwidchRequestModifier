@@ -3,7 +3,6 @@
  */
 'use strict';
 function activateCase(oneCase) {
-    chrome.browserAction.setBadgeText({text: oneCase.name});
     chrome.extension.sendRequest({action: "activateCase", caseStr: angular.toJson(oneCase)}, (response) => {
     })
 }
@@ -37,9 +36,10 @@ angular.module('mainCtrl', [])
             activateCase($scope.activeCase);
         };
 
-        $scope.disActivate = function () {
+        $scope.deActivate = function () {
             $scope.isActive = false;
-            chrome.browserAction.setBadgeText({text: ''});
+            chrome.extension.sendRequest({action: "deactivateCase"}, (response) => {
+            })
         };
 
         $scope.newCase = function () {
@@ -54,11 +54,12 @@ angular.module('mainCtrl', [])
                 name: newCaseName
             });
 
+            //持久化用例
             persistAllCases($scope);
         }
     });
 
-//持久化数据到后台
+//持久化所有用例数据到后台
 function persistAllCases($scope) {
     chrome.extension.sendRequest({
         action: "saveAllCases",

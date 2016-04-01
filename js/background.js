@@ -54,12 +54,20 @@ chrome.extension.onRequest.addListener(
             saveAllCases(request.casesStr);
         }
 
+        //激活用例
         else if (request.action == "activateCase") {
             activateCase(request.caseStr);
         }
 
+        //关闭用例
         else if (request.action == "deactivateCase") {
             deactivateCase(request.caseStr);
+        }
+
+        //获取激活的用例
+        else if (request.action == "getActiveCase") {
+            let simCase = getActiveCase();
+            sendResponse({activeCase: simCase});
         }
 
         else
@@ -113,6 +121,9 @@ function activateCase(caseStr) {
 
     //设置 badge 文本
     chrome.browserAction.setBadgeText({text: activeCase.name});
+
+    //清除 browser action title
+    chrome.browserAction.setTitle({title: 'Simulating: '+activeCase.name});
 }
 
 function deactivateCase() {
@@ -120,6 +131,9 @@ function deactivateCase() {
 
     //清除 badge 文本
     chrome.browserAction.setBadgeText({text: ''});
+
+    //清除 browser action title
+    chrome.browserAction.setTitle({title: ''});
 }
 
 function modifyHeaders(details) {
@@ -164,4 +178,8 @@ function modifyUserAgent(details) {
 
         requestHeader.value = activeCase.ua;
     });
+}
+
+function getActiveCase() {
+    return activeCase;
 }

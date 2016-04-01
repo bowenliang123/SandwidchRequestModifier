@@ -39,12 +39,12 @@
         <!--左栏-->
         <div class="col-sm-3">
 
-            <h4>isActive:{{isActive}}</h4>
+            <h4>isActive:{{activeCase!=undefined}}</h4>
             <h4> activeCase.id:{{activeCase.caseId}} </h4>
             <h4> showCase.id:{{showCase.caseId}} </h4>
             <div>
                 <button class="btn btn-danger" ng-click="deActivate()">停止生效</button>
-                <button class="btn btn-success" ng-click="newCase()">新 case</button>
+                <button class="btn btn-success" ng-click="createNewCase()">新 case</button>
             </div>
             <div class="row">
                 <div class="card card-block col-sm-5 m-l-1"

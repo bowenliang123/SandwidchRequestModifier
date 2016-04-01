@@ -5,43 +5,77 @@
 
 angular.module('mainCtrl', [])
     .controller('mainCtrl', ($scope) => {
-        $scope.cases = [];
 
-        $scope.isActive = false;
-        $scope.showCase = $scope.cases[0];
-        $scope.activeCase = $scope.cases[0];
 
+        //初始化
         init();
 
+        /**
+         * 初始化
+         */
         function init() {
+
+            $scope.cases = [];
+            $scope.showCase = undefined;
+            $scope.activeCase = undefined;
+
+            //getAllCases
             chrome.extension.sendRequest({action: "getAllCases"}, (response) => {
                 console.log(response);
-                $scope.cases = response.cases;
+                var cases = response.cases;
+                if (cases && cases.length > 0) {
+                    $scope.cases = cases;
+
+                    if (!$scope.showCase) {
+                        $scope.showCase = $scope.cases[0];
+                    }
+
+                    //force refresh
+                    $scope.$apply();
+                }
+            });
+
+            //getActiveCase
+            chrome.extension.sendRequest({action: "getActiveCase"}, (response) => {
+                console.log(response);
+                let activeCase = response.activeCase;
+                if (!activeCase) {
+                    $scope.activeCase = undefined;
+                    return;
+                }
+
+                $scope.activeCase = activeCase;
+                $scope.showCase = activeCase;
 
                 //force refresh
                 $scope.$apply();
+
             });
         }
 
-        $scope.changeCaseId = function (c) {
-            $scope.showCase = c;
+        $scope.changeCaseId = function (simCase) {
+            $scope.showCase = simCase;
         };
 
-        $scope.activate = function (c) {
-            $scope.isActive = true;
-            $scope.activeCase = c;
-            activateCase($scope.activeCase);
-            chrome.extension.sendRequest({action: "activateCase", caseStr: angular.toJson(oneCase)}, (response) => {
+        $scope.activate = function (simCase) {
+            //update local
+            $scope.activeCase = simCase;
+
+            //update remote
+            chrome.extension.sendRequest({action: "activateCase", caseStr: angular.toJson(simCase)}, (response) => {
             })
         };
 
         $scope.deActivate = function () {
-            $scope.isActive = false;
+            //update local
+            $scope.activeCase = undefined;
+
+            //update remote
             chrome.extension.sendRequest({action: "deactivateCase"}, (response) => {
             })
         };
 
-        $scope.newCase = function () {
+        $scope.createNewCase = function () {
             var newCaseName = prompt('输入新建case名称', '');
             if (!newCaseName) {
                 alert('呃…名称不能为空啊');
@@ -54,16 +88,16 @@ angular.module('mainCtrl', [])
             });
 
             //持久化用例
-            persistAllCases($scope);
+            persistAllCases($scope.cases);
         }
     })
 ;
 
 //持久化所有用例数据到后台
-function persistAllCases($scope) {
+function persistAllCases(simCases) {
     chrome.extension.sendRequest({
         action: "saveAllCases",
-        casesStr: angular.toJson($scope.cases)  //序列化
+        casesStr: angular.toJson(simCases)  //序列化
     }, (response) => {
     });
 }

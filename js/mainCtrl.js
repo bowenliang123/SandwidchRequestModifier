@@ -28,6 +28,8 @@ angular.module('mainCtrl', [])
 
                     if (!$scope.showCase) {
                         $scope.showCase = $scope.cases[0];
+
+                        $scope.parseAndUpdateUaInfo($scope.showCase.ua);
                     }
 
                     //force refresh
@@ -47,13 +49,17 @@ angular.module('mainCtrl', [])
                 $scope.activeCase = activeCase;
                 $scope.showCase = activeCase;
 
+                $scope.parseAndUpdateUaInfo($scope.showCase.ua);
+
                 //force refresh
                 $scope.$apply();
 
             });
+
+
         }
 
-        $scope.changeCaseId = (simCase)=> {
+        $scope.changeShowCase = (simCase)=> {
             $scope.showCase = simCase;
         };
 
@@ -124,6 +130,22 @@ angular.module('mainCtrl', [])
             //持久化所有用例
             persistAllCases($scope.cases);
         }
+
+        //local methods
+
+        //解析并更新 UA 信息
+        $scope.parseAndUpdateUaInfo = (uaStr) => {
+            if (!uaStr) {
+                return;
+            }
+
+            let uaParser = new UAParser();
+            uaParser.setUA(uaStr);
+
+            $scope.uaInfo = uaParser.getResult();
+            console.log($scope.uaInfo);
+        }
+
     })
 ;
 
@@ -135,3 +157,4 @@ function persistAllCases(simCases) {
     }, (response) => {
     });
 }
+

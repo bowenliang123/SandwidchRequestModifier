@@ -33,7 +33,16 @@ gulp.task('copyBower', ['clean'], ()=> {
 });
 
 // 复制必要的文件
-gulp.task('copy', ['clean', 'copyBower'], ()=> {
+gulp.task('copyNpm', ['clean'], ()=> {
+    return gulp.src([
+            //ua-parser-js
+            'node_modules/ua-parser-js/dist/**/*',
+        ], {"base": "."})
+        .pipe(gulp.dest('dist/'));
+});
+
+// 复制必要的文件
+gulp.task('copy', ['clean', 'copyBower','copyNpm'], ()=> {
     return gulp.src([
             'manifest.json',
             'html/*',

@@ -46,7 +46,7 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
 chrome.extension.onRequest.addListener(
     function (request, sender, sendResponse) {
         if (request.action == "getAllCases") {
-            var allCases = getAllCases();
+            let allCases = getAllCases();
             sendResponse({cases: allCases});
         }
 
@@ -88,7 +88,7 @@ function appendHeaders(requestHeaders, additionalHeaders) {
 }
 
 let activeCase;
-let allCases = [
+let demoCases = [
     {
         caseId: 0,
         name: 'UC',
@@ -108,12 +108,24 @@ let allCases = [
         headers: "key1:value1\nkey2:value2"
     }
 ];
+
 function getAllCases() {
-    return allCases;
+    //读取 localstorage
+    let allCasesStr = localStorage.getItem('allCases');
+    if (!allCasesStr) {
+        return [];
+    } else {
+        return JSON.parse(allCasesStr);
+    }
 }
 
 function saveAllCases(casesStr) {
-    allCases = JSON.parse(casesStr);
+    if (!casesStr) {
+        return;
+    }
+
+    //写入 localstorage
+    localStorage.setItem('allCases', casesStr);
 }
 
 function activateCase(caseStr) {
@@ -153,11 +165,15 @@ function modifyHeaders(details) {
             return;
         }
 
-        let headerKeyValue = modHeaderStr.split(':');
-        if (headerKeyValue && headerKeyValue.length == 2) {
-            //加入自定义header
-            customHeaders[headerKeyValue[0]] = headerKeyValue[1].concat();
+        let index = modHeaderStr.indexOf(':');
+        if (index <= 0 || index == modHeaderStr.length - 1) {
+            return;
         }
+
+        let headerKey = modHeaderStr.slice(0, index);
+        let headerValue = modHeaderStr.slice(index + 1, modHeaderStr.length);
+        //加入自定义header
+        customHeaders[headerKey] = headerValue;
     });
 
     //增加到请求的 header

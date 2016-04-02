@@ -8,3 +8,12 @@
 .simCase:hover {
     cursor: pointer;
 }
+
+.text-breakall {
+    word-break: break-all;
+}
+
+#headersTextarea {
+    font-family: monospace;
+    overflow-y:visible;
+}

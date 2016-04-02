@@ -46,12 +46,15 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
 chrome.extension.onRequest.addListener(
     function (request, sender, sendResponse) {
         if (request.action == "getAllCases") {
-            let allCases = getAllCases();
-            sendResponse({cases: allCases});
+            getAllCases((cases)=> {
+                sendResponse({cases: cases});
+            });
+
         }
 
         else if (request.action == "saveAllCases") {
-            saveAllCases(request.casesStr);
+            let cases = JSON.parse(request.casesStr);
+            saveAllCases(cases);
         }
 
         //激活用例
@@ -109,23 +112,23 @@ let demoCases = [
     }
 ];
 
-function getAllCases() {
-    //读取 localstorage
-    let allCasesStr = localStorage.getItem('allCases');
-    if (!allCasesStr) {
-        return [];
-    } else {
-        return JSON.parse(allCasesStr);
-    }
+function getAllCases(callback) {
+    //https://developer.chrome.com/extensions/storage#property-sync
+    chrome.storage.sync.get('allCases', (items) => {
+        callback && callback(items['allCases']);
+    });
 }
 
-function saveAllCases(casesStr) {
-    if (!casesStr) {
+function saveAllCases(cases) {
+    if (!cases) {
         return;
     }
 
-    //写入 localstorage
-    localStorage.setItem('allCases', casesStr);
+    // Save it using the Chrome extension storage API.
+    //https://developer.chrome.com/extensions/storage#property-sync
+    chrome.storage.sync.set({'allCases': cases}, () => {
+        console.log('saveAllCases finished.');
+    });
 }
 
 function activateCase(caseStr) {

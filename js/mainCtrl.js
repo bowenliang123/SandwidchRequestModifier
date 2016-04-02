@@ -57,7 +57,7 @@ angular.module('mainCtrl', [])
             $scope.showCase = simCase;
         };
 
-        $scope.activate = (simCase) => {
+        $scope.activateCase = (simCase) => {
             //update local
             $scope.activeCase = simCase;
 
@@ -66,7 +66,7 @@ angular.module('mainCtrl', [])
             })
         };
 
-        $scope.deActivate = ()=> {
+        $scope.deActivateCase = ()=> {
             //update local
             $scope.activeCase = undefined;
 
@@ -75,10 +75,41 @@ angular.module('mainCtrl', [])
             })
         };
 
-        $scope.remove = (simCase)=> {
+        $scope.removeCase = (simCaseId)=> {
+            if (!simCaseId) {
+                return;
+            }
+            if (!$scope.cases) {
+                return;
+            }
+
+            $scope.cases = $scope.cases.reduce((pre, next)=> {
+                if (next.caseId != simCaseId) {
+                    pre.push(next);
+                }
+                return pre;
+            }, []);
+
+            //持久化所有用例
+            persistAllCases($scope.cases);
         };
 
-        $scope.createNewCase =  () =>{
+        $scope.saveCase = (simCaseId)=> {
+            if (!$scope.cases) {
+                return;
+            }
+            let targetCase = $scope.cases.filter((item)=>(item.caseId == simCaseId));
+            if (!targetCase) {
+                return;
+            }
+
+            targetCase = $scope.showCase;
+
+            //持久化所有用例
+            persistAllCases($scope.cases);
+        };
+
+        $scope.createNewCase = () => {
             var newCaseName = prompt('输入新建case名称', '');
             if (!newCaseName) {
                 alert('呃…名称不能为空啊');
@@ -90,7 +121,7 @@ angular.module('mainCtrl', [])
                 name: newCaseName
             });
 
-            //持久化用例
+            //持久化所有用例
             persistAllCases($scope.cases);
         }
     })

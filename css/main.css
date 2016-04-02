@@ -2,4 +2,9 @@
     border: 1px solid lightgrey;
     border-radius: 5px;
     margin: 5px 0;
+    padding: 5px 0;
+}
+
+.simCase:hover {
+    cursor: pointer;
 }

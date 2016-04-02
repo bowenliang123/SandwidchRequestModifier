@@ -44,28 +44,45 @@
             <a class="nav-item nav-link" href="#">showCase.id:{{showCase.caseId}} </a>
         </div>
         <form class="form-inline pull-xs-right">
-            <button class="btn btn-danger" ng-click="deActivate()" ng-disabled="activeCase==undefined">停止生效</button>
-            <button class="btn btn-success" ng-click="createNewCase()">新 case</button>
+            <button class="btn btn-danger" ng-click="deActivateCase()" ng-disabled="(activeCase==undefined)">
+                <i class="fa fa-stop-circle"></i> 停止生效
+            </button>
         </form>
     </nav>
 
     <div class="row m-y-1">
         <!--左栏-->
         <div class="col-sm-3">
-
+            <div>
+                <button class="btn btn-success btn-block" ng-click="createNewCase()">
+                    <i class="fa fa-newspaper-o"></i> 新建用例
+                </button>
+            </div>
+            <hr>
             <div class="row simCase"
                  ng-repeat="onecase in cases"
                  ng-click="changeCaseId(onecase)">
-                <div class="col-sm-6">
-                    <p>{{onecase.name}} </p>
+                <div class="col-sm-8">
+                    {{onecase.name}}
                 </div>
-                <div class="col-sm-3" ng-click="activate(onecase)">激活</div>
-                <div class="col-sm-3" ng-click="remove(onecase)">删除</div>
+                <!--激活按钮-->
+                <div class="col-sm-1" ng-click="activateCase(onecase)"><i class="fa fa-magic"></i></div>
+                <!--删除按钮-->
+                <div class="col-sm-1" ng-click="removeCase(onecase.caseId)"><i class="fa fa-trash-o"></i></div>
             </div>
         </div>
 
         <!--中栏-->
         <div class="col-sm-9">
+            <h3>
+                <span class="label label-default"># {{showCase.caseId}}</span>
+                {{showCase.name}}
+                <!--保存按钮-->
+                <button class="btn btn-primary" ng-click="saveCase(showCase.id)" style="float: right">
+                    <i class="fa fa-save"></i> 保存用例
+                </button>
+            </h3>
+            <hr>
             <!--UA-->
             <fieldset class="form-group">
                 <label for="uaTextarea">User Agent</label>
@@ -81,6 +98,8 @@
                           placeholder="key:value"
                           ng-model="showCase.headers"></textarea>
             </fieldset>
+
+
         </div>
 
         <!--右栏-->

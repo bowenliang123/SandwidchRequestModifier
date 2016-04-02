@@ -13,7 +13,6 @@
     word-break: break-all;
 }
 
-#headersTextarea {
+textarea {
     font-family: monospace;
-    overflow-y:visible;
 }

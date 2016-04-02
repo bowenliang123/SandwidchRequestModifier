@@ -40,15 +40,18 @@
     <nav class="navbar navbar-light bg-faded">
         <div class="nav navbar-nav">
             <a class="nav-item nav-link active" href="#">REQUESTER <span class="sr-only">(current)</span></a>
-            <a class="nav-item nav-link" href="#" ng-if="activeCase">
-                Active Case: #{{activeCase.caseId}} {{activeCase.name}}
-            </a>
-            <a class="nav-item nav-link" href="#" ng-if="!activeCase">
-                No active case.
-            </a>
+
+
         </div>
         <form class="form-inline pull-xs-right">
-            <button class="btn btn-link text-danger" ng-click="deActivateCase()" ng-disabled="(activeCase==undefined)">
+            <a class="nav-item nav-link text-primary" href="#" ng-if="activeCase">
+                Simulating: {{activeCase.name}} (#{{activeCase.caseId}})
+            </a>
+            <a class="nav-item nav-link text-info" href="#" ng-if="!activeCase">
+                No active case.
+            </a>
+            <button class="btn btn-link text-danger"
+                    ng-click="deactivateCase()" ng-disabled="(activeCase==undefined)">
                 <i class="fa fa-stop"></i>
             </button>
         </form>
@@ -61,18 +64,21 @@
             <div class="row">
                 <div class="col-sm-4 p-x-0">
                     <!--新建按钮-->
-                    <button class="btn btn-link btn-block" ng-click="createNewCase()">
+                    <button class="btn btn-link btn-block"
+                            ng-click="createNewCase()">
                         <i class="fa fa-plus"></i>
                     </button>
                 </div>
 
                 <div class="col-sm-4 p-x-0">
-                    <button class="btn btn-link btn-block">
+                    <button class="btn btn-link btn-block"
+                            ng-click="importCases()">
                         <i class="fa fa-upload"></i>
                     </button>
                 </div>
                 <div class="col-sm-4 p-x-0">
-                    <button class="btn btn-link btn-block">
+                    <button class="btn btn-link btn-block"
+                            ng-click="exportCases()">
                         <i class="fa fa-download"></i>
                     </button>
                 </div>
@@ -85,9 +91,9 @@
                     {{onecase.name}}
                 </div>
                 <!--激活按钮-->
-                <div class="col-sm-1" ng-click="activateCase(onecase)"><i class="fa fa-play"></i></div>
+                <div class="col-sm-1 text-success" ng-click="activateCase(onecase)"><i class="fa fa-play"></i></div>
                 <!--删除按钮-->
-                <div class="col-sm-1" ng-click="removeCase(onecase.caseId)"><i class="fa fa-times"></i></div>
+                <div class="col-sm-1 text-danger" ng-click="removeCase(onecase.caseId)"><i class="fa fa-times"></i></div>
             </div>
         </div>
 
@@ -106,10 +112,10 @@
             <!--UA-->
             <fieldset class="form-group">
                 <label for="uaTextarea">User Agent</label>
-                <textarea class="form-control" id="uaTextarea" rows="2"
+                <textarea class="form-control text-breakall" id="uaTextarea" rows="2"
                           placeholder="use brower user agent string by default"
                           ng-model="showCase.ua"
-                          ng-change="parseAndUpdateUaInfo(showCase.ua)"></textarea>
+                          ng-change="parseAndUpdateUaInfo()"></textarea>
             </fieldset>
 
             <!--headers-->
@@ -152,5 +158,9 @@
     </div>
 </div>
 
+<!--hidden-->
+<div hidden>
+    <input type="file" id="uploadInput" accept="text/*">
+</div>
 </body>
 </html>

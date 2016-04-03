@@ -253,9 +253,7 @@ angular.module('mainCtrl', [])
                 let headerKey = headerLine.slice(0, index);
                 let headerValue = headerLine.slice(index + 1, headerLine.length);
 
-                let targetDescriptors = headerDescriptors.filter((descriptor)=> {
-                    return descriptor.headerName == headerKey;
-                });
+                let targetDescriptors = headerDescriptors.filter((descriptor)=> (descriptor.headerName == headerKey));
 
                 //未找到对应的 header 描述
                 if (!targetDescriptors && targetDescriptors.length >= 1) {
@@ -297,9 +295,7 @@ angular.module('mainCtrl', [])
                         }
 
                         parsedSubFieldsArr.forEach((subField)=> {
-                            let targetSubFieldArr = subFields.filter((sf)=> {
-                                return sf.fieldName == subField.fieldName
-                            });
+                            let targetSubFieldArr = subFields.filter((field)=> ( field.fieldName == subField.fieldName));
                             if (targetSubFieldArr.length == 0) {
 
                                 headerInfo.subFields.push(subField);

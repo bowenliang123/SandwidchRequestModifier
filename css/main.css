@@ -16,3 +16,19 @@
 textarea {
     font-family: monospace;
 }
+
+/* main 页面下 footer*/
+.mainFooter {
+    padding: 10px;
+    margin-top: 25px;
+    margin-bottom: 10px;
+    color: #BBBBBB;
+    border-top: 1px solid #EEEEEE;
+    text-align: center;
+    font-style: italic;
+    font-size: 14px;
+}
+
+.mainFooter iframe {
+    margin: 0 0 0 5px;
+}

@@ -11,7 +11,7 @@ angular.module('mainCtrl', [])
         init();
 
         function getAllCases() {
-//getAllCases
+            //getAllCases
             chrome.extension.sendRequest({action: "getAllCases"}, (response) => {
                 let cases = response.cases;
                 if (cases && cases.length > 0) {
@@ -21,6 +21,8 @@ angular.module('mainCtrl', [])
                         $scope.showCase = $scope.cases[0];
 
                         $scope.parseAndUpdateUaInfo();
+
+                        $scope.updateHeadersInfo();
                     }
 
                     //force refresh
@@ -82,6 +84,20 @@ angular.module('mainCtrl', [])
             $scope.cases = [];
             $scope.showCase = undefined;
             $scope.activeCase = undefined;
+
+            $scope.headersInfo = [
+                {
+                    headerName: 'ucpara',
+                    headerDescription: 'UC公参',
+                    subFields: [
+                        {
+                            fieldName: 'sn',
+                            fieldValue: '123456789',
+                            fieldDescription: 'sn 就是一个 sn'
+                        }
+                    ]
+                }
+            ];
 
             getAllCases();
 
@@ -199,6 +215,113 @@ angular.module('mainCtrl', [])
             }, (response) => {
             });
         };
+
+        $scope.updateHeadersInfo = ()=> {
+            let demoHeaderDescriptors = [
+                {
+                    headerName: 'UCPARA',
+                    headerDescription: 'UC 公参',
+                    subFieldsSeparator: '`',
+                    subFields: [
+                        {
+                            fieldName: 'sessionid',
+                            fieldDescription: '就是SESSION的编号咯'
+                        }
+                    ]
+                }
+            ];
+            let headersInfo = parseHeaders($scope.showCase.headers, demoHeaderDescriptors);
+
+            $scope.headersInfo = headersInfo;
+        };
+
+        function parseHeaders(headersStr, headerDescriptors) {
+            if (!headersStr || headersStr == ''
+                || !headerDescriptors || headerDescriptors == []) {
+                return [];
+            }
+
+            let headersInfo = [];
+            let headerLines = headersStr.split('\n');
+            headerLines.forEach((headerLine)=> {
+
+                let index = headerLine.indexOf(':');
+                if (index <= 0 || index == headerLine.length - 1) {
+                    return;
+                }
+
+                let headerKey = headerLine.slice(0, index);
+                let headerValue = headerLine.slice(index + 1, headerLine.length);
+
+                let targetDescriptors = headerDescriptors.filter((descriptor)=> {
+                    return descriptor.headerName == headerKey;
+                });
+
+                //未找到对应的 header 描述
+                if (!targetDescriptors && targetDescriptors.length >= 1) {
+                    return;
+                } else {
+                    let targetHeaderDescriptor = targetDescriptors[0];
+
+                    let headerInfo = {
+                        headerName: headerKey,
+                        headerValue: headerValue,
+                        headerDescription: targetHeaderDescriptor.headerDescription
+                    };
+
+                    //找到对应的 header 描述
+                    let separator = targetHeaderDescriptor.subFieldsSeparator;
+                    let subFields = targetHeaderDescriptor.subFields;
+                    if (!separator || !subFields || subFields == []) {
+                        headersInfo.push(headerInfo);
+                    } else {
+                        headerInfo.subFields = [];
+
+                        let subFieldsArr = headerValue.split(separator);
+                        let parsedSubFieldsArr = [];
+                        if (subFieldsArr && subFieldsArr != []) {
+                            subFieldsArr.forEach((subFieldStr)=> {
+                                if (!subFieldStr || subFieldStr == '') {
+                                    return;
+                                }
+
+                                let index = subFieldStr.indexOf('=');
+                                if (index < 0) {
+                                    return;
+                                }
+
+                                let subFieldKey = subFieldStr.slice(0, index);
+                                let subFieldValue = subFieldStr.slice(index + 1, subFieldStr.length);
+                                parsedSubFieldsArr.push({fieldName: subFieldKey, fieldValue: subFieldValue});
+                            });
+                        }
+
+                        parsedSubFieldsArr.forEach((subField)=> {
+                            let targetSubFieldArr = subFields.filter((sf)=> {
+                                return sf.fieldName == subField.fieldName
+                            });
+                            if (targetSubFieldArr.length == 0) {
+
+                                headerInfo.subFields.push(subField);
+                                return;
+                            }
+
+                            let targetSubField = targetSubFieldArr[0];
+                            subField.fieldDescription = targetSubField.fieldDescription;
+
+                            headerInfo.subFields.push(subField);
+                        });
+
+                        headersInfo.push(headerInfo);
+                    }
+                }
+
+
+            });
+
+            return headersInfo;
+        }
+
 
         //响应JSON上传input 元素点击事件
         function addInputLIstener() {

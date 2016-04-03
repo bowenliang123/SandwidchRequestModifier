@@ -102,6 +102,7 @@ angular.module('mainCtrl', [])
 
         $scope.changeShowCase = (simCase)=> {
             $scope.showCase = simCase;
+            $scope.parseAndUpdateUaInfo();
         };
 
         $scope.activateCase = (simCase) => {
@@ -145,15 +146,21 @@ angular.module('mainCtrl', [])
             if (!$scope.cases) {
                 return;
             }
+
             let targetCase = $scope.cases.filter((item)=>(item.caseId == simCaseId));
             if (!targetCase) {
                 return;
             }
 
-            targetCase = $scope.showCase;
+            targetCase[0] = $scope.showCase;
 
             //持久化所有用例
-            persistAllCases($scope.cases);
+            $scope.persistAllCases($scope.cases);
+
+
+            if (simCaseId == $scope.activeCase.caseId) {
+                $scope.activateCase($scope.showCase);
+            }
         };
 
         $scope.createNewCase = () => {
@@ -169,7 +176,7 @@ angular.module('mainCtrl', [])
             });
 
             //持久化所有用例
-            persistAllCases($scope.cases);
+            $scope.persistAllCases($scope.cases);
         };
 
         //local methods
@@ -177,9 +184,6 @@ angular.module('mainCtrl', [])
         //解析并更新 UA 信息
         $scope.parseAndUpdateUaInfo = () => {
             let uaStr = $scope.showCase.ua;
-            if (!uaStr) {
-                return;
-            }
 
             let uaParser = new UAParser();
             uaParser.setUA(uaStr);

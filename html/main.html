@@ -103,7 +103,7 @@
                 <span class="label label-default"># {{showCase.caseId}}</span>
                 {{showCase.name}}
                 <!--保存按钮-->
-                <button class="btn btn-link text-primary" ng-click="saveCase(showCase.id)" style="float: right">
+                <button class="btn btn-link text-primary" ng-click="saveCase(showCase.caseId)" style="float: right">
                     <i class="fa fa-save"></i>
                 </button>
             </h3>
@@ -113,7 +113,7 @@
             <fieldset class="form-group">
                 <label for="uaTextarea">User Agent</label>
                 <textarea class="form-control text-breakall" id="uaTextarea" rows="2"
-                          placeholder="use brower user agent string by default"
+                          placeholder="using default user agent string"
                           ng-model="showCase.ua"
                           ng-change="parseAndUpdateUaInfo()"></textarea>
             </fieldset>
@@ -132,7 +132,7 @@
             <table class="table table-striped table-bordered">
                 <thead>
                 <tr>
-                    <th>系统</th>
+                    <th>操作系统</th>
                     <th>浏览器</th>
                     <th>版本</th>
                     <th>内核</th>

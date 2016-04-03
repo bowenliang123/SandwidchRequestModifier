@@ -59,7 +59,8 @@ chrome.extension.onRequest.addListener(
 
         //激活用例
         else if (request.action == "activateCase") {
-            activateCase(request.caseStr);
+            let simCase = JSON.parse(request.caseStr);
+            activateCase(simCase);
         }
 
         //关闭用例
@@ -69,13 +70,26 @@ chrome.extension.onRequest.addListener(
 
         //获取激活的用例
         else if (request.action == "getActiveCase") {
-            let simCase = getActiveCase();
-            sendResponse({activeCase: simCase});
+            fetchActiveCase((simCase)=> {
+                sendResponse({activeCase: simCase});
+            });
         }
 
         else
             sendResponse({}); // snub them.
     });
+
+//监听chrome storage 变化
+chrome.storage.onChanged.addListener(function (changes, namespace) {
+    for (let key in changes) {
+        if (key == 'activeCase') {
+            fetchActiveCase();
+        }
+
+        else if (key == 'allCases') {
+        }
+    }
+});
 
 function appendHeaders(requestHeaders, additionalHeaders) {
     if (!additionalHeaders || additionalHeaders.length < 1) {
@@ -131,24 +145,44 @@ function saveAllCases(cases) {
     });
 }
 
-function activateCase(caseStr) {
-    activeCase = JSON.parse(caseStr);
+function fetchActiveCase(callback) {
+    chrome.storage.sync.get('activeCase', (items) => {
+        activeCase = items['activeCase'];
 
-    //设置 badge 文本
-    chrome.browserAction.setBadgeText({text: activeCase.name});
+        if (activeCase) {
+            //设置 badge 文本
+            chrome.browserAction.setBadgeText({text: activeCase.name});
 
-    //清除 browser action title
-    chrome.browserAction.setTitle({title: `Name:  ${activeCase.name}\n\nUser Agent:\n${activeCase.ua}\n\nHeaders:\n${activeCase.headers}`});
+            //清除 browser action title
+            chrome.browserAction.setTitle({title: `Name:  ${activeCase.name}\n\nUser Agent:\n${activeCase.ua}\n\nHeaders:\n${activeCase.headers}`});
+
+            callback && callback(items['activeCase']);
+        } else {
+            //设置 badge 文本
+            chrome.browserAction.setBadgeText({text: ''});
+
+            //清除 browser action title
+            chrome.browserAction.setTitle({title: ''});
+
+            callback && callback(null);
+        }
+    });
+}
+
+function saveActiveCase(simCase) {
+    //activeCase = simCase;
+
+    chrome.storage.sync.set({'activeCase': simCase}, () => {
+        console.log('saveActiveCase finished.');
+    });
+}
+
+function activateCase(simCase) {
+    saveActiveCase(simCase);
 }
 
 function deactivateCase() {
-    activeCase = undefined;
-
-    //清除 badge 文本
-    chrome.browserAction.setBadgeText({text: ''});
-
-    //清除 browser action title
-    chrome.browserAction.setTitle({title: ''});
+    saveActiveCase(null);
 }
 
 function modifyHeaders(details) {
@@ -183,7 +217,6 @@ function modifyHeaders(details) {
     appendHeaders(details.requestHeaders, customHeaders);
 }
 
-
 function modifyUserAgent(details) {
     if (!activeCase || !activeCase.ua) {
         return;
@@ -197,8 +230,4 @@ function modifyUserAgent(details) {
 
         requestHeader.value = activeCase.ua;
     });
-}
-
-function getActiveCase() {
-    return activeCase;
 }

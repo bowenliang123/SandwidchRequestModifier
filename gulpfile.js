@@ -28,7 +28,7 @@ gulp.task('copyBower', ['clean'], ()=> {
             //jquery
             'bower_components/jquery/dist/**/*',
 
-        ], {"base": "."})
+        ], {'base': '.'})
         .pipe(gulp.dest('dist/'));
 });
 
@@ -37,7 +37,7 @@ gulp.task('copyNpm', ['clean'], ()=> {
     return gulp.src([
             //ua-parser-js
             'node_modules/ua-parser-js/dist/**/*',
-        ], {"base": "."})
+        ], {'base': '.'})
         .pipe(gulp.dest('dist/'));
 });
 
@@ -50,7 +50,7 @@ gulp.task('copy', ['clean', 'copyBower','copyNpm'], ()=> {
             'css/*',
             //'bower_components/**/',
             'img/*'
-        ], {"base": "."})
+        ], {'base': '.'})
         .pipe(gulp.dest('dist/'));
 });
 
@@ -66,7 +66,7 @@ gulp.task('clean', () => {
 
 // zip
 gulp.task('zip', ['clean', 'copy'], ()=> {
-    return gulp.src('dist/**/*', {"base": "."})
+    return gulp.src('dist/**/*', {'base': '.'})
         .pipe(zip('quico-' + getYYYYMMDDHHMM() + '.zip'))
         .pipe(gulp.dest('releases'));
 });

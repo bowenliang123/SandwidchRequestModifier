@@ -123,7 +123,7 @@ angular.module('mainCtrl', [])
                     let targetDescriptors = headerDescriptors.filter((descriptor)=> (descriptor.headerName == headerKey));
 
                     //未找到对应的 header 描述器
-                    if (!targetDescriptors && targetDescriptors.length >= 1) {
+                    if (!targetDescriptors || targetDescriptors.length < 1) {
                         return;
                     }
 
@@ -172,13 +172,14 @@ angular.module('mainCtrl', [])
                         });
                     }
 
-                    //匹配并添加子字段说明
+                    //匹配并添加子字段描述
                     parsedSubFieldsArr.forEach((subField)=> {
                         subField.fieldDescription = subFields[subField.fieldName];
 
                         headerInfo.subFields.push(subField);
                     });
 
+                    //排序子字段描述
                     headerInfo.subFields.sort((headerInfo1, headerInfo2)=> {
                         if (headerInfo1.fieldName == headerInfo2.fieldName) {
                             return 0;
@@ -317,13 +318,12 @@ angular.module('mainCtrl', [])
 
             targetCase[0] = $scope.showCase;
 
-            //持久化所有用例
-            $scope.persistAllCases($scope.cases);
-
-
-            if (simCaseId == $scope.activeCase.caseId) {
+            if ($scope.activeCase && simCaseId == $scope.activeCase.caseId) {
                 $scope.activateCase($scope.showCase);
             }
+
+            //持久化所有用例
+            $scope.persistAllCases($scope.cases);
         };
 
         /**
@@ -374,6 +374,10 @@ angular.module('mainCtrl', [])
          */
         $scope.updateHeadersInfo = ()=> {
             let demoHeaderDescriptors = [
+                {
+                    headerName: 'author',
+                    headerDescription: ' 作者名字啊'
+                },
                 {
                     headerName: 'UCPARA',
                     headerDescription: 'UC 公参',

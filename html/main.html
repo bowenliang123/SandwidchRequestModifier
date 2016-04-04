@@ -153,19 +153,21 @@
 
             <!--header 信息-->
             <div>
-                <h4>headers info</h4>
+                <h4>Header 信息</h4>
                 <div ng-repeat="headerInfo in headersInfo">
                     <h6>{{headerInfo.headerName}} - {{headerInfo.headerDescription}}</h6>
-                    <div class="row">
-                        <div class="col-sm-2 text-breakall">字段</div>
-                        <div class="col-sm-4 text-breakall">值</div>
-                        <div class="col-sm-5 m-l-1 text-breakall">描述</div>
-                    </div>
-                    <div class="row"
-                         ng-repeat="subField in headerInfo.subFields">
-                        <div class="col-sm-2 text-breakall">{{subField.fieldName}}</div>
-                        <div class="col-sm-4 text-breakall">{{subField.fieldValue}}</div>
-                        <div class="col-sm-5 m-l-1 text-breakall">{{subField.fieldDescription}}</div>
+                    <div ng-if="headerInfo.subFields">
+                        <div class="row">
+                            <div class="col-sm-2 text-breakall">字段</div>
+                            <div class="col-sm-4 text-breakall">值</div>
+                            <div class="col-sm-5 m-l-1 text-breakall">描述</div>
+                        </div>
+                        <div class="row"
+                             ng-repeat="subField in headerInfo.subFields">
+                            <div class="col-sm-2 text-breakall">{{subField.fieldName}}</div>
+                            <div class="col-sm-4 text-breakall">{{subField.fieldValue}}</div>
+                            <div class="col-sm-5 m-l-1 text-breakall">{{subField.fieldDescription}}</div>
+                        </div>
                     </div>
                 </div>
             </div>

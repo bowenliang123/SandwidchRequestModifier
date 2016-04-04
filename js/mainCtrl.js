@@ -108,24 +108,29 @@ angular.module('mainCtrl', [])
                 return [];
             }
 
+            //拆解 header 行
             let headersInfo = [];
             let headerLines = headersStr.split('\n');
             headerLines.forEach((headerLine)=> {
 
-                let index = headerLine.indexOf(':');
-                if (index <= 0 || index == headerLine.length - 1) {
-                    return;
-                }
+                    //拆解 header 行
+                    let index = headerLine.indexOf(':');
+                    if (index <= 0 || index == headerLine.length - 1) {
+                        return;
+                    }
+                    let headerKey = headerLine.slice(0, index);
+                    let headerValue = headerLine.slice(index + 1, headerLine.length);
 
-                let headerKey = headerLine.slice(0, index);
-                let headerValue = headerLine.slice(index + 1, headerLine.length);
+                    //找到匹配的 header 描述器
+                    let targetDescriptors = headerDescriptors.filter((descriptor)=> (descriptor.headerName == headerKey));
 
-                let targetDescriptors = headerDescriptors.filter((descriptor)=> (descriptor.headerName == headerKey));
+                    //未找到对应的 header 描述器
+                    if (!targetDescriptors && targetDescriptors.length >= 1) {
+                        return;
+                    }
 
-                //未找到对应的 header 描述
-                if (!targetDescriptors && targetDescriptors.length >= 1) {
-                    return;
-                } else {
+
+                    //找到对应的 header 描述
                     let targetHeaderDescriptor = targetDescriptors[0];
 
                     let headerInfo = {
@@ -134,59 +139,57 @@ angular.module('mainCtrl', [])
                         headerDescription: targetHeaderDescriptor.headerDescription
                     };
 
-                    //找到对应的 header 描述
+
+                    //若当前header描述器包含子字段分割字符
                     let separator = targetHeaderDescriptor.subFieldsSeparator;
                     let subFields = targetHeaderDescriptor.subFields;
                     if (!separator || !subFields || subFields == []) {
                         headersInfo.push(headerInfo);
-                    } else {
-                        headerInfo.subFields = [];
+                        return;
+                    }
 
-                        let subFieldsArr = headerValue.split(separator);
-                        let parsedSubFieldsArr = [];
-                        if (subFieldsArr && subFieldsArr != []) {
-                            subFieldsArr.forEach((subFieldStr)=> {
-                                if (!subFieldStr || subFieldStr == '') {
-                                    return;
-                                }
 
-                                let index = subFieldStr.indexOf('=');
-                                if (index < 0) {
-                                    return;
-                                }
+                    headerInfo.subFields = [];
 
-                                let subFieldKey = subFieldStr.slice(0, index);
-                                let subFieldValue = subFieldStr.slice(index + 1, subFieldStr.length);
-                                parsedSubFieldsArr.push({fieldName: subFieldKey, fieldValue: subFieldValue});
-                            });
-                        }
+                    let subFieldsArr = headerValue.split(separator);
+                    let parsedSubFieldsArr = [];
 
-                        parsedSubFieldsArr.forEach((subField)=> {
-                            let targetSubFieldArr = subFields.filter((field)=> ( field.fieldName == subField.fieldName));
-                            if (targetSubFieldArr.length == 0) {
+                    //拆解 header 行中子字段并组装
+                    if (subFieldsArr && subFieldsArr != []) {
 
-                                headerInfo.subFields.push(subField);
+                        subFieldsArr.forEach((subFieldStr)=> {
+                            if (!subFieldStr || subFieldStr == '') {
                                 return;
                             }
 
-                            let targetSubField = targetSubFieldArr[0];
-                            subField.fieldDescription = targetSubField.fieldDescription;
+                            //拆解子字段键值对
+                            let index = subFieldStr.indexOf('=');
+                            if (index < 0) {
+                                return;
+                            }
+                            let subFieldKey = subFieldStr.slice(0, index);
+                            let subFieldValue = subFieldStr.slice(index + 1, subFieldStr.length);
 
-                            headerInfo.subFields.push(subField);
+                            parsedSubFieldsArr.push({fieldName: subFieldKey, fieldValue: subFieldValue});
                         });
-
-                        headersInfo.push(headerInfo);
                     }
+
+                    //匹配并添加子字段说明
+                    parsedSubFieldsArr.forEach((subField)=> {
+                        subField.fieldDescription = subFields[subField.fieldName];
+
+                        headerInfo.subFields.push(subField);
+                    });
+
+                    headersInfo.push(headerInfo);
                 }
-
-
-            });
+            );
 
             return headersInfo;
         }
 
 
-        //响应JSON上传input 元素点击事件
+//响应JSON上传input 元素点击事件
         function addInputLIstener() {
             $('#uploadInput').change((e) => {
                 console.log(e);
@@ -366,16 +369,14 @@ angular.module('mainCtrl', [])
                     headerName: 'UCPARA',
                     headerDescription: 'UC 公参',
                     subFieldsSeparator: '`',
-                    subFields: [
-                        {
-                            fieldName: 'sessionid',
-                            fieldDescription: '就是SESSION的编号咯'
-                        }
-                    ]
+                    subFields: {
+                        'sessionid': '就是SESSION的编号咯'
+                    }
                 }
             ];
             let headersInfo = parseHeaders($scope.showCase.headers, demoHeaderDescriptors);
 
             $scope.headersInfo = headersInfo;
         };
-    });
+    })
+;

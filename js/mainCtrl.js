@@ -18,11 +18,7 @@ angular.module('mainCtrl', [])
                     $scope.cases = cases;
 
                     if (!$scope.showCase) {
-                        $scope.showCase = $scope.cases[0];
-
-                        $scope.parseAndUpdateUaInfo();
-
-                        $scope.updateHeadersInfo();
+                        $scope.changeShowCase($scope.cases[0]);
                     }
 
                     //force refresh
@@ -42,9 +38,7 @@ angular.module('mainCtrl', [])
                 }
 
                 $scope.activeCase = activeCase;
-                $scope.showCase = activeCase;
-
-                $scope.parseAndUpdateUaInfo();
+                $scope.changeShowCase(activeCase);
 
                 //force refresh
                 $scope.$apply();
@@ -104,136 +98,9 @@ angular.module('mainCtrl', [])
             getActiveCase();
 
             addInputLIstener();
+
+            addInputLIstener();
         }
-
-        //导入所有用例
-        $scope.importCases = ()=> {
-            $('#uploadInput')[0].click();
-        };
-
-        //导出所有用例
-        $scope.exportCases = ()=> {
-            invokeDownload(angular.toJson($scope.cases));
-        };
-
-        $scope.changeShowCase = (simCase)=> {
-            $scope.showCase = simCase;
-            $scope.parseAndUpdateUaInfo();
-        };
-
-        $scope.activateCase = (simCase) => {
-            //update local
-            $scope.activeCase = simCase;
-
-            //update remote
-            chrome.extension.sendRequest({action: "activateCase", caseStr: angular.toJson(simCase)}, (response) => {
-            })
-        };
-
-        $scope.deactivateCase = ()=> {
-            //update local
-            $scope.activeCase = undefined;
-
-            //update remote
-            chrome.extension.sendRequest({action: "deactivateCase"}, (response) => {
-            })
-        };
-
-        $scope.removeCase = (simCaseId)=> {
-            if (!simCaseId) {
-                return;
-            }
-            if (!$scope.cases) {
-                return;
-            }
-
-            $scope.cases = $scope.cases.reduce((pre, next)=> {
-                if (next.caseId != simCaseId) {
-                    pre.push(next);
-                }
-                return pre;
-            }, []);
-
-            //持久化所有用例
-            $scope.persistAllCases($scope.cases);
-        };
-
-        $scope.saveCase = (simCaseId)=> {
-            if (!$scope.cases) {
-                return;
-            }
-
-            let targetCase = $scope.cases.filter((item)=>(item.caseId == simCaseId));
-            if (!targetCase) {
-                return;
-            }
-
-            targetCase[0] = $scope.showCase;
-
-            //持久化所有用例
-            $scope.persistAllCases($scope.cases);
-
-
-            if (simCaseId == $scope.activeCase.caseId) {
-                $scope.activateCase($scope.showCase);
-            }
-        };
-
-        $scope.createNewCase = () => {
-            var newCaseName = prompt('输入新建case名称', '');
-            if (!newCaseName) {
-                alert('呃…名称不能为空啊');
-                return;
-            }
-            console.log(newCaseName);
-            $scope.cases.push({
-                caseId: new Date().getTime(),
-                name: newCaseName
-            });
-
-            //持久化所有用例
-            $scope.persistAllCases($scope.cases);
-        };
-
-        //local methods
-
-        //解析并更新 UA 信息
-        $scope.parseAndUpdateUaInfo = () => {
-            let uaStr = $scope.showCase.ua;
-
-            let uaParser = new UAParser();
-            uaParser.setUA(uaStr);
-
-            $scope.uaInfo = uaParser.getResult();
-        };
-
-        //持久化所有用例数据到后台
-        $scope.persistAllCases = (simCases) => {
-            chrome.extension.sendRequest({
-                action: "saveAllCases",
-                casesStr: angular.toJson(simCases)  //序列化
-            }, (response) => {
-            });
-        };
-
-        $scope.updateHeadersInfo = ()=> {
-            let demoHeaderDescriptors = [
-                {
-                    headerName: 'UCPARA',
-                    headerDescription: 'UC 公参',
-                    subFieldsSeparator: '`',
-                    subFields: [
-                        {
-                            fieldName: 'sessionid',
-                            fieldDescription: '就是SESSION的编号咯'
-                        }
-                    ]
-                }
-            ];
-            let headersInfo = parseHeaders($scope.showCase.headers, demoHeaderDescriptors);
-
-            $scope.headersInfo = headersInfo;
-        };
 
         function parseHeaders(headersStr, headerDescriptors) {
             if (!headersStr || headersStr == ''
@@ -350,10 +217,165 @@ angular.module('mainCtrl', [])
             });
         }
 
-        addInputLIstener();
+        /**
+         * 导入所有用例
+         */
+        $scope.importCases = ()=> {
+            $('#uploadInput')[0].click();
+        };
 
-    })
-;
+        /**
+         * 导出所有用例
+         */
+        $scope.exportCases = ()=> {
+            invokeDownload(angular.toJson($scope.cases));
+        };
+
+        /**
+         * 更换展示用例
+         * @param simCase
+         */
+        $scope.changeShowCase = (simCase)=> {
+            $scope.showCase = simCase;
+            $scope.parseAndUpdateUaInfo();
+            $scope.updateHeadersInfo();
+        };
+
+        /**
+         * 激活用例
+         * @param simCase
+         */
+        $scope.activateCase = (simCase) => {
+            //update local
+            $scope.activeCase = simCase;
+
+            //update remote
+            chrome.extension.sendRequest({action: "activateCase", caseStr: angular.toJson(simCase)}, (response) => {
+            })
+        };
+
+        /**
+         * 停止生效
+         */
+        $scope.deactivateCase = ()=> {
+            //update local
+            $scope.activeCase = undefined;
+
+            //update remote
+            chrome.extension.sendRequest({action: "deactivateCase"}, (response) => {
+            })
+        };
+
+        /**
+         * 删除用例
+         * @param simCaseId
+         */
+        $scope.removeCase = (simCaseId)=> {
+            if (!simCaseId) {
+                return;
+            }
+            if (!$scope.cases) {
+                return;
+            }
+
+            $scope.cases = $scope.cases.reduce((pre, next)=> {
+                if (next.caseId != simCaseId) {
+                    pre.push(next);
+                }
+                return pre;
+            }, []);
+
+            //持久化所有用例
+            $scope.persistAllCases($scope.cases);
+        };
+
+        /**
+         * 保存当前用例
+         * @param simCaseId
+         */
+        $scope.saveCase = (simCaseId)=> {
+            if (!$scope.cases) {
+                return;
+            }
+
+            let targetCase = $scope.cases.filter((item)=>(item.caseId == simCaseId));
+            if (!targetCase) {
+                return;
+            }
+
+            targetCase[0] = $scope.showCase;
+
+            //持久化所有用例
+            $scope.persistAllCases($scope.cases);
 
 
+            if (simCaseId == $scope.activeCase.caseId) {
+                $scope.activateCase($scope.showCase);
+            }
+        };
 
+        /**
+         * 新建用例
+         */
+        $scope.createNewCase = () => {
+            var newCaseName = prompt('输入新建case名称', '');
+            if (!newCaseName) {
+                alert('呃…名称不能为空啊');
+                return;
+            }
+            console.log(newCaseName);
+            $scope.cases.push({
+                caseId: new Date().getTime(),
+                name: newCaseName
+            });
+
+            //持久化所有用例
+            $scope.persistAllCases($scope.cases);
+        };
+
+
+        /**
+         * 解析并更新 UA 信息
+         */
+        $scope.parseAndUpdateUaInfo = () => {
+            let uaStr = $scope.showCase.ua;
+
+            let uaParser = new UAParser();
+            uaParser.setUA(uaStr);
+
+            $scope.uaInfo = uaParser.getResult();
+        };
+
+        /**
+         * 持久化所有用例数据到后台
+         */
+        $scope.persistAllCases = (simCases) => {
+            chrome.extension.sendRequest({
+                action: "saveAllCases",
+                casesStr: angular.toJson(simCases)  //序列化
+            }, (response) => {
+            });
+        };
+
+        /**
+         * 更新 header 信息
+         */
+        $scope.updateHeadersInfo = ()=> {
+            let demoHeaderDescriptors = [
+                {
+                    headerName: 'UCPARA',
+                    headerDescription: 'UC 公参',
+                    subFieldsSeparator: '`',
+                    subFields: [
+                        {
+                            fieldName: 'sessionid',
+                            fieldDescription: '就是SESSION的编号咯'
+                        }
+                    ]
+                }
+            ];
+            let headersInfo = parseHeaders($scope.showCase.headers, demoHeaderDescriptors);
+
+            $scope.headersInfo = headersInfo;
+        };
+    });

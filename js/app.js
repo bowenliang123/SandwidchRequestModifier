@@ -4,7 +4,10 @@
 'use strict';
 
 var app = angular.module('app', [
-    'mainCtrl'
+    //service
+    'dataService',
+    //controller
+    'mainCtrl',
 ]);
 
 app.config([

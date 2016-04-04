@@ -4,11 +4,41 @@
 'use strict';
 
 angular.module('mainCtrl', [])
-    .controller('mainCtrl',($scope) => {
+    .controller('mainCtrl', ['$scope', 'dataService', ($scope, dataService) => {
 
+        /**
+         * 初始化
+         */
+        (function init() {
 
-        //初始化
-        init();
+            $scope.cases = [];
+            $scope.showCase = undefined;
+            $scope.activeCase = undefined;
+            $scope.headerDescriptors = '[]';
+            //$scope.headerDescriptors = angular.toJson(demoHeaderDescriptors, true);
+
+            $scope.headersInfo = [
+                {
+                    headerName: 'ucpara',
+                    headerDescription: 'UC公参',
+                    subFields: [
+                        {
+                            fieldName: 'sn',
+                            fieldValue: '123456789',
+                            fieldDescription: 'sn 就是一个 sn'
+                        }
+                    ]
+                }
+            ];
+
+            getHeaderDescriptors();
+
+            getAllCases();
+
+            getActiveCase();
+
+            addInputLIstener();
+        })();
 
         function getAllCases() {
             //getAllCases
@@ -70,39 +100,6 @@ angular.module('mainCtrl', [])
             document.body.removeChild(downloadLink);
         }
 
-        /**
-         * 初始化
-         */
-        function init() {
-
-            $scope.cases = [];
-            $scope.showCase = undefined;
-            $scope.activeCase = undefined;
-            $scope.headerDescriptors = '[]';
-            //$scope.headerDescriptors = angular.toJson(demoHeaderDescriptors, true);
-
-            $scope.headersInfo = [
-                {
-                    headerName: 'ucpara',
-                    headerDescription: 'UC公参',
-                    subFields: [
-                        {
-                            fieldName: 'sn',
-                            fieldValue: '123456789',
-                            fieldDescription: 'sn 就是一个 sn'
-                        }
-                    ]
-                }
-            ];
-
-            getHeaderDescriptors();
-
-            getAllCases();
-
-            getActiveCase();
-
-            addInputLIstener();
-        }
 
         function getHeaderDescriptors() {
             let callback = (item)=> {
@@ -416,5 +413,5 @@ angular.module('mainCtrl', [])
                 console.error('Failed to parse headerDescriptors (should be in JSON format).');
             }
         };
-    })
+    }])
 ;

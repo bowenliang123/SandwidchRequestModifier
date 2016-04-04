@@ -98,8 +98,6 @@ angular.module('mainCtrl', [])
             getActiveCase();
 
             addInputLIstener();
-
-            addInputLIstener();
         }
 
         function parseHeaders(headersStr, headerDescriptors) {
@@ -181,9 +179,20 @@ angular.module('mainCtrl', [])
                         headerInfo.subFields.push(subField);
                     });
 
+                    headerInfo.subFields.sort((headerInfo1, headerInfo2)=> {
+                        if (headerInfo1.fieldName == headerInfo2.fieldName) {
+                            return 0;
+                        } else if (headerInfo1.fieldName > headerInfo2.fieldName) {
+                            return 1;
+                        } else {
+                            return -1;
+                        }
+                    });
+
                     headersInfo.push(headerInfo);
                 }
             );
+
 
             return headersInfo;
         }
@@ -214,7 +223,7 @@ angular.module('mainCtrl', [])
                     }, false);
 
 
-                    //将文件读取为 Base64格式
+                    //读取文件文本内容
                     reader.readAsText(filePath);
                 }
             });

@@ -78,6 +78,8 @@ angular.module('mainCtrl', [])
             $scope.cases = [];
             $scope.showCase = undefined;
             $scope.activeCase = undefined;
+            $scope.headerDescriptors = '[]';
+            //$scope.headerDescriptors = angular.toJson(demoHeaderDescriptors, true);
 
             $scope.headersInfo = [
                 {
@@ -93,12 +95,43 @@ angular.module('mainCtrl', [])
                 }
             ];
 
+            getHeaderDescriptors();
+
             getAllCases();
 
             getActiveCase();
 
             addInputLIstener();
         }
+
+        function getHeaderDescriptors() {
+            let callback = (item)=> {
+                if (item) {
+                    $scope.headerDescriptors = '[]';
+                    return;
+                }
+                $scope.headerDescriptors = item;
+            };
+
+            chrome.storage.sync.get('headerDescriptors', (items) => {
+                if (items['headerDescriptors']) {
+                    callback && callback(items['headerDescriptors']);
+                }
+            });
+        }
+
+        $scope.getHeaderDescriptors = getHeaderDescriptors;
+
+        $scope.saveHeaderDescriptors = ()=> {
+            try {
+                let hd = angular.fromJson($scope.headerDescriptors);
+                chrome.storage.sync.set({'headerDescriptors': $scope.headerDescriptors}, () => {
+                    console.log('saveHeaderDescriptors finished.');
+                });
+            } catch (e) {
+                alert('Failed to parse headerDescriptors (should be in JSON format).');
+            }
+        };
 
         function parseHeaders(headersStr, headerDescriptors) {
             if (!headersStr || headersStr == ''
@@ -250,7 +283,7 @@ angular.module('mainCtrl', [])
          */
         $scope.changeShowCase = (simCase)=> {
             $scope.showCase = simCase;
-            $scope.parseAndUpdateUaInfo();
+            $scope.updateUaInfo();
             $scope.updateHeadersInfo();
         };
 
@@ -349,7 +382,7 @@ angular.module('mainCtrl', [])
         /**
          * 解析并更新 UA 信息
          */
-        $scope.parseAndUpdateUaInfo = () => {
+        $scope.updateUaInfo = () => {
             let uaStr = $scope.showCase.ua;
 
             let uaParser = new UAParser();
@@ -373,23 +406,15 @@ angular.module('mainCtrl', [])
          * 更新 header 信息
          */
         $scope.updateHeadersInfo = ()=> {
-            let demoHeaderDescriptors = [
-                {
-                    headerName: 'author',
-                    headerDescription: ' 作者名字啊'
-                },
-                {
-                    headerName: 'UCPARA',
-                    headerDescription: 'UC 公参',
-                    subFieldsSeparator: '`',
-                    subFields: {
-                        'sessionid': '就是SESSION的编号咯'
-                    }
-                }
-            ];
-            let headersInfo = parseHeaders($scope.showCase.headers, demoHeaderDescriptors);
 
-            $scope.headersInfo = headersInfo;
+            try {
+                console.log($scope.headerDescriptors);
+                let headersInfo = parseHeaders($scope.showCase.headers, angular.fromJson($scope.headerDescriptors));
+
+                $scope.headersInfo = headersInfo;
+            } catch (e) {
+                console.error('Failed to parse headerDescriptors (should be in JSON format).');
+            }
         };
     })
 ;

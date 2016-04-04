@@ -18,7 +18,7 @@ gulp.task('copyBower', ['clean'], ()=> {
             //angular
             'bower_components/angular/angular.min.js',
 
-            //boostrap
+            //bootstrap
             'bower_components/bootstrap/dist/**/*',
 
             //font-awesome
@@ -42,7 +42,7 @@ gulp.task('copyNpm', ['clean'], ()=> {
 });
 
 // 复制必要的文件
-gulp.task('copy', ['clean', 'copyBower','copyNpm'], ()=> {
+gulp.task('copy', ['clean', 'copyBower', 'copyNpm'], ()=> {
     return gulp.src([
             'manifest.json',
             'html/*',

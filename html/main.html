@@ -27,6 +27,7 @@
     <!--angular app-->
     <script src="../js/app.js"></script>
     <script src="../js/mainCtrl.js"></script>
+    <script src="../js/demoHeaderDescriptors.js"></script>
 
     <!--app-->
 </head>
@@ -45,7 +46,8 @@
         </div>
         <form class="form-inline pull-xs-right">
             <a class="nav-item nav-link text-primary" href="#" ng-if="activeCase">
-                Simulating: {{activeCase.name}} (#{{activeCase.caseId}})
+                Simulating: {{activeCase.name}}
+                <span class="text-muted">(#{{activeCase.caseId}})</span>
             </a>
             <a class="nav-item nav-link text-info" href="#" ng-if="!activeCase">
                 No active case.
@@ -59,6 +61,105 @@
 
     <div class="row m-y-1">
         <!--左栏-->
+        <div class="col-sm-9">
+            <h4>
+                {{showCase.name}}
+                <small class="text-muted"># {{showCase.caseId}}</small>
+                <!--保存按钮-->
+                <button class="btn btn-link text-primary" ng-click="saveCase(showCase.caseId)" style="float: right">
+                    <i class="fa fa-save"></i>
+                </button>
+            </h4>
+            <hr>
+
+            <!--UA-->
+            <fieldset class="form-group">
+                <label for="uaTextarea">User Agent</label>
+                <textarea class="form-control text-breakall" id="uaTextarea" rows="2"
+                          placeholder="using default user agent string"
+                          ng-model="showCase.ua"
+                          ng-change="updateUaInfo()"></textarea>
+            </fieldset>
+
+            <!--headers-->
+            <fieldset class="form-group">
+                <label for="headersTextarea">Headers</label>
+                <textarea class="form-control text-breakall" id="headersTextarea" rows="8"
+                          placeholder="key:value"
+                          ng-model="showCase.headers"
+                          ng-change="updateHeadersInfo()"></textarea>
+            </fieldset>
+
+            <hr>
+
+            <!--UA 信息-->
+            <div>
+                <h4>
+                    UA 信息
+                    <small class="text-muted">仅供参考</small>
+                </h4>
+                <table class="table table-striped table-bordered">
+                    <thead>
+                    <tr>
+                        <th>操作系统</th>
+                        <th>浏览器</th>
+                        <th>版本</th>
+                        <th>内核</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td id="system">{{uaInfo.os.name}} {{uaInfo.os.version}}</td>
+                        <td id="browser_name">{{uaInfo.browser.name}}</td>
+                        <td id="browser_version">{{uaInfo.browser.version}}</td>
+                        <td id="browser_engine">{{uaInfo.engine.name}} {{uaInfo.engine.version}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!--header 信息-->
+            <div>
+                <h4>Header 信息</h4>
+                <div class="row"
+                     ng-repeat="headerInfo in headersInfo">
+
+
+                    <div class="col-sm-3">
+                        <blockquote class="blockquote ">
+                            <p class="m-b-0">{{headerInfo.headerName}}</p>
+                            <footer class="blockquote-footer">{{headerInfo.headerDescription}}</footer>
+                        </blockquote>
+                    </div>
+                    <div class="col-sm-9">
+                        <div ng-if="!headerInfo.subFields">
+                            {{headerInfo.headerValue}}
+                        </div>
+                        <table class="table table-sm table-striped"
+                               ng-if="headerInfo.subFields">
+                            <thead>
+                            <tr>
+                                <th class="col-sm-2">字段</th>
+                                <th class="col-sm-5">当前值</th>
+                                <th class="col-sm-4">描述</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="subField in headerInfo.subFields">
+                                <td class="col-sm-2 text-breakall">{{subField.fieldName}}</td>
+                                <td class="col-sm-5 text-breakall">{{subField.fieldValue}}</td>
+                                <td class="col-sm-4 text-breakall">{{subField.fieldDescription}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+        <!--右栏-->
         <div class="col-sm-3">
 
             <div class="row">
@@ -87,98 +188,37 @@
             <div class="row simCase"
                  ng-repeat="onecase in cases"
                  ng-click="changeShowCase(onecase)">
-                <div class="col-sm-8">
+                <div class="col-sm-6">
                     {{onecase.name}}
                 </div>
                 <!--激活按钮-->
-                <div class="col-sm-1 text-success" ng-click="activateCase(onecase)"><i class="fa fa-play"></i></div>
+                <div class="col-sm-2" ng-click="activateCase(onecase)">
+                    <button class="btn btn-success btn-sm"><i class="fa fa-play"></i></button>
+                </div>
                 <!--删除按钮-->
-                <div class="col-sm-1 text-danger" ng-click="removeCase(onecase.caseId)"><i class="fa fa-times"></i>
+                <div class="col-sm-2" ng-click="removeCase(onecase.caseId)">
+                    <button class="btn btn-danger btn-sm"><i class="fa fa-times"></i></button>
                 </div>
             </div>
         </div>
+    </div>
 
-        <!--中栏-->
-        <div class="col-sm-9">
-            <h4>
-                <span class="label label-pill label-default"># {{showCase.caseId}}</span>
-                {{showCase.name}}
-                <!--保存按钮-->
-                <button class="btn btn-link text-primary" ng-click="saveCase(showCase.caseId)" style="float: right">
-                    <i class="fa fa-save"></i>
-                </button>
+    <nav class="navbar navbar-light bg-faded">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#exCollapsingNavbar">
+            &#9776;
+        </button>
+    </nav>
+
+    <div class="collapse" id="exCollapsingNavbar">
+        <div class="p-a-1">
+            <h4>Header 描述规则
+                <small>
+                    <button ng-click="saveHeaderDescriptors()"><i class="fa fa-save"></i></button>
+                </small>
             </h4>
-            <hr>
-
-            <!--UA-->
-            <fieldset class="form-group">
-                <label for="uaTextarea">User Agent</label>
-                <textarea class="form-control text-breakall" id="uaTextarea" rows="2"
-                          placeholder="using default user agent string"
-                          ng-model="showCase.ua"
-                          ng-change="parseAndUpdateUaInfo()"></textarea>
-            </fieldset>
-
-            <!--headers-->
-            <fieldset class="form-group">
-                <label for="headersTextarea">Headers</label>
-                <textarea class="form-control text-breakall" id="headersTextarea" rows="8"
-                          placeholder="key:value"
-                          ng-model="showCase.headers"></textarea>
-            </fieldset>
-
-            <hr>
-
-            <div>
-                <h4>UA 信息 （仅供参考）</h4>
-                <table class="table table-striped table-bordered">
-                    <thead>
-                    <tr>
-                        <th>操作系统</th>
-                        <th>浏览器</th>
-                        <th>版本</th>
-                        <th>内核</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td id="system">{{uaInfo.os.name}} {{uaInfo.os.version}}</td>
-                        <td id="browser_name">{{uaInfo.browser.name}}</td>
-                        <td id="browser_version">{{uaInfo.browser.version}}</td>
-                        <td id="browser_engine">{{uaInfo.engine.name}} {{uaInfo.engine.version}}</td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <!--header 信息-->
-            <div>
-                <h4>Header 信息</h4>
-                <div ng-repeat="headerInfo in headersInfo">
-                    <h6>{{headerInfo.headerName}} - {{headerInfo.headerDescription}}</h6>
-                    <div ng-if="headerInfo.subFields">
-                        <div class="row">
-                            <div class="col-sm-2 text-breakall">字段</div>
-                            <div class="col-sm-4 text-breakall">值</div>
-                            <div class="col-sm-5 m-l-1 text-breakall">描述</div>
-                        </div>
-                        <div class="row"
-                             ng-repeat="subField in headerInfo.subFields">
-                            <div class="col-sm-2 text-breakall">{{subField.fieldName}}</div>
-                            <div class="col-sm-4 text-breakall">{{subField.fieldValue}}</div>
-                            <div class="col-sm-5 m-l-1 text-breakall">{{subField.fieldDescription}}</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
+            <textarea class="form-control text-breakall" rows="30"
+                      ng-model="headerDescriptors"></textarea>
         </div>
-
-        <!--右栏-->
-        <!--<div class="col-sm-3">-->
-        <!--right-->
-        <!--</div>-->
     </div>
 </div>
 

@@ -4,7 +4,7 @@
 'use strict';
 
 angular.module('mainCtrl', [])
-    .controller('mainCtrl', ($scope) => {
+    .controller('mainCtrl',($scope) => {
 
 
         //初始化
@@ -106,7 +106,7 @@ angular.module('mainCtrl', [])
 
         function getHeaderDescriptors() {
             let callback = (item)=> {
-                if (item) {
+                if (!item) {
                     $scope.headerDescriptors = '[]';
                     return;
                 }

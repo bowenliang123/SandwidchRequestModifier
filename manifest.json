@@ -1,13 +1,13 @@
 {
-  "name": "Requester",
+  "name": "Sailfish Requester 旗鱼 请求管理器",
   "version": "0.0.1",
   "description": "a chrome extension for modifying headers, parameters, user agents and etc.",
   "manifest_version": 2,
   "content_security_policy": "script-src 'self' 'unsafe-eval' https://ssl.google-analytics.com; object-src 'self'",
   "icons": {
-    "16": "img/r.png",
-    "48": "img/r.png",
-    "128": "img/r.png"
+    "16": "img/s_logo2.png",
+    "48": "img/s_logo2.png",
+    "128": "img/s_logo2.png"
   },
   "permissions": [
     "tabs",
@@ -19,7 +19,7 @@
     "webRequestBlocking"
   ],
   "omnibox": {
-    "keyword": "Requester"
+    "keyword": "Sailfish"
   },
   "options_page": "html/main.html",
   "background": {
@@ -28,6 +28,5 @@
     ]
   },
   "browser_action": {
-    "default_title": "Requester"
   }
 }

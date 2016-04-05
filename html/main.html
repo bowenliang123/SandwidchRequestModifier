@@ -41,9 +41,7 @@
     <!--导航栏-->
     <nav class="navbar navbar-light bg-faded">
         <div class="nav navbar-nav">
-            <a class="nav-item nav-link active" href="#">REQUESTER <span class="sr-only">(current)</span></a>
-
-
+            <a class="nav-item nav-link active" href="#">Sailfish Requester 旗鱼 请求管理器</a>
         </div>
         <form class="form-inline pull-xs-right">
             <a class="nav-item nav-link text-primary" href="#" ng-if="activeCase">
@@ -75,7 +73,7 @@
 
             <!--UA-->
             <fieldset class="form-group">
-                <label for="uaTextarea">User Agent</label>
+                <label for="uaTextarea">Custom User Agent</label>
                 <textarea class="form-control text-breakall" id="uaTextarea" rows="2"
                           placeholder="using default user agent string"
                           ng-model="showCase.ua"
@@ -84,7 +82,10 @@
 
             <!--headers-->
             <fieldset class="form-group">
-                <label for="headersTextarea">Headers</label>
+                <label for="headersTextarea">
+                    Additional Headers
+                    <small class="text-muted">(Separated by line breaks '\n')</small>
+                </label>
                 <textarea class="form-control text-breakall" id="headersTextarea" rows="8"
                           placeholder="key:value"
                           ng-model="showCase.headers"

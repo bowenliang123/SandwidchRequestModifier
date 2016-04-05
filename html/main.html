@@ -22,7 +22,7 @@
     <script src="../bower_components/angular/angular.min.js"></script>
 
     <!--lib-->
-    <script src="../node_modules/ua-parser-js/dist/ua-parser.min.js"></script>
+    <script src="../bower_components/ua-parser-js/dist/ua-parser.min.js"></script>
 
     <!--angular app-->
     <script src="../js/app.js"></script>
@@ -205,9 +205,10 @@
         </div>
     </div>
 
+    <!--解析器规则-->
     <nav class="navbar navbar-light bg-faded">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#exCollapsingNavbar">
-            &#9776;
+            &#9776; 解析器规则
         </button>
     </nav>
 
@@ -215,7 +216,9 @@
         <div class="p-a-1">
             <h4>Header 描述规则
                 <small>
-                    <button ng-click="saveHeaderDescriptors()"><i class="fa fa-save"></i></button>
+                    <button class="btn btn-primary" ng-click="saveHeaderDescriptors()">
+                        <i class="fa fa-save"></i>
+                    </button>
                 </small>
             </h4>
             <textarea class="form-control text-breakall" rows="30"

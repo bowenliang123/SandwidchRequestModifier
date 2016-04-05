@@ -28,21 +28,15 @@ gulp.task('copyBower', ['clean'], ()=> {
             //jquery
             'bower_components/jquery/dist/**/*',
 
-        ], {'base': '.'})
-        .pipe(gulp.dest('dist/'));
-});
-
-// 复制必要的文件
-gulp.task('copyNpm', ['clean'], ()=> {
-    return gulp.src([
             //ua-parser-js
-            'node_modules/ua-parser-js/dist/**/*',
+            'bower_components/ua-parser-js/dist/**/*',
+
         ], {'base': '.'})
         .pipe(gulp.dest('dist/'));
 });
 
 // 复制必要的文件
-gulp.task('copy', ['clean', 'copyBower', 'copyNpm'], ()=> {
+gulp.task('copy', ['clean', 'copyBower'], ()=> {
     return gulp.src([
             'manifest.json',
             'html/*',

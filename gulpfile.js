@@ -67,7 +67,7 @@ gulp.task('clean', () => {
 // zip
 gulp.task('zip', ['clean', 'copy'], ()=> {
     return gulp.src('dist/**/*', {'base': '.'})
-        .pipe(zip('quico-' + getYYYYMMDDHHMM() + '.zip'))
+        .pipe(zip('SailFishRequester-' + getYYYYMMDDHHMM() + '.zip'))
         .pipe(gulp.dest('releases'));
 });
 

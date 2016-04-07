@@ -211,22 +211,22 @@ function modifyHeaders(details) {
         return;
     }
 
-    let customHeaders = {};
-    modHeaderLines.forEach((modHeaderStr)=> {
+    let customHeaders = modHeaderLines.reduce((customHeaders, modHeaderStr)=> {
         if (!modHeaderStr || modHeaderStr.indexOf(':') < 0) {
-            return;
+            return customHeaders;
         }
 
         let index = modHeaderStr.indexOf(':');
         if (index <= 0 || index == modHeaderStr.length - 1) {
-            return;
+            return customHeaders;
         }
 
         let headerKey = modHeaderStr.slice(0, index);
         let headerValue = modHeaderStr.slice(index + 1, modHeaderStr.length);
         //加入自定义header
         customHeaders[headerKey] = headerValue;
-    });
+        return customHeaders;
+    }, {});
 
     //增加到请求的 header
     appendHeaders(details.requestHeaders, customHeaders);
@@ -238,7 +238,7 @@ function modifyUserAgent(details) {
     }
 
     for (let i = 0; i < details.requestHeaders.length; i++) {
-        let requestHeader = requestHeaders[i];
+        let requestHeader = details.requestHeaders[i];
         let headerName = requestHeader.name.toLowerCase();
 
         //修改user agent

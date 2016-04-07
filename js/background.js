@@ -235,6 +235,11 @@ function modifyGetParams(details) {
     if (!activeCase || !activeCase.params) {
         return;
     }
+    let currentUrl = details.url;
+
+    if (currentUrl.contains('chrome-extension://')){
+        return;
+    }
 
     //准备自定义header
     let modParamLines = activeCase.params.split('\n');
@@ -243,7 +248,6 @@ function modifyGetParams(details) {
     }
 
 
-    let currentUrl = details.url;
 
     let aNode = document.createElement('a');
     aNode.style.display = 'none';

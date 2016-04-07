@@ -6,6 +6,29 @@
 
 console.log('background.js');
 
+let activeCase;
+
+let demoCases = [
+    {
+        caseId: 0,
+        name: 'UC',
+        ua: 'Mozilla/5.0 (Linux; U; Android 4.4.4; zh-CN; MI 4LTE Build/KTU84P) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 UCBrowser/10.9.2.712 U3/0.8.0 Mobile',
+        headers: "headerKey:headerValue0"
+    },
+    {
+        caseId: 1,
+        name: 'Wechat',
+        ua: 'mozilla/5.0 (linux; u; android 4.1.2; zh-cn; mi-one plus build/jzo54k) applewebkit/534.30 (khtml, like gecko) version/4.0 mobile safari/534.30 micromessenger/5.0.1.352                ',
+        headers: "headerKey:headerValue1"
+    },
+    {
+        caseId: 2,
+        name: 'Weibo',
+        ua: 'Mozilla/5.0 (Linux; U; Android 4.0.4; zh-cn; HTC Sensation XE with Beats Audio Z715e Build/IML74K) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30',
+        headers: "key1:value1\nkey2:value2"
+    }
+];
+
 // 监听 Browser Actions 按钮点击事件
 chrome.browserAction.onClicked.addListener(function (tab) {
     //打开选项页
@@ -21,9 +44,10 @@ chrome.webRequest.onBeforeRequest.addListener(
             return;
         }
 
-        let str = modifyGetParams(details);
-        if (str != details.url) {
-            return {redirectUrl: str};
+        //应用GET参数修改规则
+        let newUrl = modifyGetParams(details);
+        if (newUrl != details.url) {
+            return {redirectUrl: newUrl};
         }
     },
     {urls: ["<all_urls>"]},
@@ -109,28 +133,6 @@ function appendHeaders(requestHeaders, additionalHeaders) {
         requestHeaders.push({name: key, value: additionalHeaders[key]});
     })
 }
-
-let activeCase;
-let demoCases = [
-    {
-        caseId: 0,
-        name: 'UC',
-        ua: 'Mozilla/5.0 (Linux; U; Android 4.4.4; zh-CN; MI 4LTE Build/KTU84P) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 UCBrowser/10.9.2.712 U3/0.8.0 Mobile',
-        headers: "headerKey:headerValue0"
-    },
-    {
-        caseId: 1,
-        name: 'Wechat',
-        ua: 'mozilla/5.0 (linux; u; android 4.1.2; zh-cn; mi-one plus build/jzo54k) applewebkit/534.30 (khtml, like gecko) version/4.0 mobile safari/534.30 micromessenger/5.0.1.352                ',
-        headers: "headerKey:headerValue1"
-    },
-    {
-        caseId: 2,
-        name: 'Weibo',
-        ua: 'Mozilla/5.0 (Linux; U; Android 4.0.4; zh-cn; HTC Sensation XE with Beats Audio Z715e Build/IML74K) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30',
-        headers: "key1:value1\nkey2:value2"
-    }
-];
 
 function getAllCases(callback) {
     //https://developer.chrome.com/extensions/storage#property-sync
@@ -242,7 +244,7 @@ function modifyGetParams(details) {
     if (!activeCase || !activeCase.params) {
         return;
     }
-    
+
     //准备自定义header
     let modParamLines = activeCase.params.split('\n');
     if (!modParamLines || modParamLines.length < 1) {
@@ -277,8 +279,8 @@ function modifyGetParams(details) {
             return;
         }
 
-        let key = modParamLine.slice(0, index);
-        let value = modParamLine.slice(index + 1, modParamLine.length);
+        let key = decodeURIComponent(modParamLine.slice(0, index));
+        let value = decodeURIComponent(modParamLine.slice(index + 1, modParamLine.length));
 
         let foundPair = pairs.find((pair)=> {
             return pair.key == key
@@ -286,22 +288,21 @@ function modifyGetParams(details) {
         if (foundPair) {
             foundPair.value = value;
         } else {
-            pairs.push({key: key, value: decodeURIComponent(value)});
+            pairs.push({key: key, value: value});
         }
     });
 
-    let newQuerySring = '?';
-    pairs.forEach((pair)=> {
-        newQuerySring = newQuerySring.concat(encodeURIComponent(pair.key), '=', encodeURIComponent(pair.value), '&');
-    });
+    //组装新query string
+    let newQueryString = pairs.reduce(
+        (result, pair)=>
+            result.concat(encodeURIComponent(pair.key), '=', encodeURIComponent(pair.value), '&')
+        , '?');
+    newQueryString = newQueryString.slice(0, newQueryString.length - 1);    //删除结尾多余的&
 
-    if (newQuerySring.endsWith('&')) {
-        newQuerySring = newQuerySring.slice(0, newQuerySring.length - 1);
-    }
 
+    let newUrl = aNode.protocol.concat('//', aNode.host, aNode.pathname, newQueryString, aNode.hash);
     document.body.removeChild(aNode);
-
-    return aNode.protocol.concat('//', aNode.host, aNode.pathname, newQuerySring, aNode.hash);
+    return newUrl;
 }
 
 function isIgnoreRequest(details) {

@@ -29,97 +29,104 @@ let demoCases = [
     }
 ];
 
-// 监听 Browser Actions 按钮点击事件
-chrome.browserAction.onClicked.addListener(function (tab) {
-    //打开选项页
-    chrome.tabs.create({'url': chrome.extension.getURL('html/main.html')}, function (tab) {
+//初始化
+(function init() {
+    //获取激活的用例
+    fetchActiveCase();
+
+
+    // 监听 Browser Actions 按钮点击事件
+    chrome.browserAction.onClicked.addListener(function (tab) {
+        //打开选项页
+        chrome.tabs.create({'url': chrome.extension.getURL('html/main.html')}, function (tab) {
+        });
     });
-});
 
 //监听所有请求，header发出前对请求进行修改
 //https://developer.chrome.com/extensions/webRequest#event-onBeforeRequest
-chrome.webRequest.onBeforeRequest.addListener(
-    function (details) {
-        if (isIgnoreRequest(details)) {
-            return;
-        }
+    chrome.webRequest.onBeforeRequest.addListener(
+        function (details) {
+            if (isIgnoreRequest(details)) {
+                return;
+            }
 
-        //应用GET参数修改规则
-        let newUrl = modifyGetParams(details);
-        if (newUrl != details.url) {
-            return {redirectUrl: newUrl};
-        }
-    },
-    {urls: ["<all_urls>"]},
-    ["blocking"]);
+            //应用GET参数修改规则
+            let newUrl = modifyGetParams(details);
+            if (newUrl != details.url) {
+                return {redirectUrl: newUrl};
+            }
+        },
+        {urls: ["<all_urls>"]},
+        ["blocking"]);
 
 
 //监听所有请求，header发出前对请求进行修改
 //https://developer.chrome.com/extensions/webRequest#event-onBeforeSendHeaders
-chrome.webRequest.onBeforeSendHeaders.addListener(
-    function (details) {
-        //console.log(details);
+    chrome.webRequest.onBeforeSendHeaders.addListener(
+        function (details) {
+            //console.log(details);
 
-        if (isIgnoreRequest(details)) {
-            return;
-        }
+            if (isIgnoreRequest(details)) {
+                return;
+            }
 
-        modifyHeaders(details);
-        modifyUserAgent(details);
+            modifyHeaders(details);
+            modifyUserAgent(details);
 
-        return {requestHeaders: details.requestHeaders};
-    },
-    {urls: ["<all_urls>"]},
-    ["blocking", "requestHeaders"]);
+            return {requestHeaders: details.requestHeaders};
+        },
+        {urls: ["<all_urls>"]},
+        ["blocking", "requestHeaders"]);
 
 //监听请求
-chrome.extension.onRequest.addListener(
-    function (request, sender, sendResponse) {
-        if (request.action == "getAllCases") {
-            getAllCases((cases)=> {
-                sendResponse({cases: cases});
-            });
+    chrome.extension.onRequest.addListener(
+        function (request, sender, sendResponse) {
+            if (request.action == "getAllCases") {
+                getAllCases((cases)=> {
+                    sendResponse({cases: cases});
+                });
 
-        }
+            }
 
-        else if (request.action == "saveAllCases") {
-            let cases = JSON.parse(request.casesStr);
-            saveAllCases(cases);
-        }
+            else if (request.action == "saveAllCases") {
+                let cases = JSON.parse(request.casesStr);
+                saveAllCases(cases);
+            }
 
-        //激活用例
-        else if (request.action == "activateCase") {
-            let simCase = JSON.parse(request.caseStr);
-            activateCase(simCase);
-        }
+            //激活用例
+            else if (request.action == "activateCase") {
+                let simCase = JSON.parse(request.caseStr);
+                activateCase(simCase);
+            }
 
-        //关闭用例
-        else if (request.action == "deactivateCase") {
-            deactivateCase(request.caseStr);
-        }
+            //关闭用例
+            else if (request.action == "deactivateCase") {
+                deactivateCase(request.caseStr);
+            }
 
-        //获取激活的用例
-        else if (request.action == "getActiveCase") {
-            fetchActiveCase((simCase)=> {
-                sendResponse({activeCase: simCase});
-            });
-        }
+            //获取激活的用例
+            else if (request.action == "getActiveCase") {
+                fetchActiveCase((simCase)=> {
+                    sendResponse({activeCase: simCase});
+                });
+            }
 
-        else
-            sendResponse({}); // snub them.
-    });
+            else
+                sendResponse({}); // snub them.
+        });
 
 //监听chrome storage 变化
-chrome.storage.onChanged.addListener(function (changes, namespace) {
-    for (let key in changes) {
-        if (key == 'activeCase') {
-            fetchActiveCase();
-        }
+    chrome.storage.onChanged.addListener(function (changes, namespace) {
+        for (let key in changes) {
+            if (key == 'activeCase') {
+                fetchActiveCase();
+            }
 
-        else if (key == 'allCases') {
+            else if (key == 'allCases') {
+            }
         }
-    }
-});
+    });
+})();
 
 function appendHeaders(requestHeaders, additionalHeaders) {
     if (!additionalHeaders || additionalHeaders.length < 1) {

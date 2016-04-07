@@ -17,9 +17,12 @@ chrome.browserAction.onClicked.addListener(function (tab) {
 //https://developer.chrome.com/extensions/webRequest#event-onBeforeRequest
 chrome.webRequest.onBeforeRequest.addListener(
     function (details) {
+        if (isIgnoreRequest(details)) {
+            return;
+        }
+
         let str = modifyGetParams(details);
-        if (str) {
-            console.log('str' + str);
+        if (str != details.url) {
             return {redirectUrl: str};
         }
     },
@@ -32,6 +35,10 @@ chrome.webRequest.onBeforeRequest.addListener(
 chrome.webRequest.onBeforeSendHeaders.addListener(
     function (details) {
         //console.log(details);
+
+        if (isIgnoreRequest(details)) {
+            return;
+        }
 
         modifyHeaders(details);
         modifyUserAgent(details);
@@ -235,19 +242,14 @@ function modifyGetParams(details) {
     if (!activeCase || !activeCase.params) {
         return;
     }
-    let currentUrl = details.url;
-
-    if (currentUrl.contains('chrome-extension://')){
-        return;
-    }
-
+    
     //准备自定义header
     let modParamLines = activeCase.params.split('\n');
     if (!modParamLines || modParamLines.length < 1) {
         return;
     }
 
-
+    let currentUrl = details.url;
 
     let aNode = document.createElement('a');
     aNode.style.display = 'none';
@@ -297,8 +299,16 @@ function modifyGetParams(details) {
         newQuerySring = newQuerySring.slice(0, newQuerySring.length - 1);
     }
 
-    return aNode.protocol.concat('//', aNode.host, aNode.pathname, newQuerySring);
-
-
     document.body.removeChild(aNode);
+
+    return aNode.protocol.concat('//', aNode.host, aNode.pathname, newQuerySring, aNode.hash);
+}
+
+function isIgnoreRequest(details) {
+    let url = details.url;
+    if (!url.startsWith('http://') && !url.startsWith('https://')) {
+        return true;
+    }
+
+    return false;
 }

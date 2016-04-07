@@ -1,7 +1,7 @@
 {
   "name": "Sailfish Requester 旗鱼 请求管理器",
   "short_name": "Sailfish",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "a chrome extension for modifying headers, user agents and etc.",
   "manifest_version": 2,
   "content_security_policy": "script-src 'self' 'unsafe-eval' https://ssl.google-analytics.com; object-src 'self'",

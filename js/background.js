@@ -17,12 +17,11 @@ chrome.browserAction.onClicked.addListener(function (tab) {
 //https://developer.chrome.com/extensions/webRequest#event-onBeforeRequest
 chrome.webRequest.onBeforeRequest.addListener(
     function (details) {
-        //console.log(details);
-
-        //检查 URL 参数并加入
-        //if (details.url.indexOf('#34567') < 0) {
-        //    return {redirectUrl: details.url + '#34567'}
-        //}
+        let str = modifyGetParams(details);
+        if (str) {
+            console.log('str' + str);
+            return {redirectUrl: str};
+        }
     },
     {urls: ["<all_urls>"]},
     ["blocking"]);
@@ -230,4 +229,72 @@ function modifyUserAgent(details) {
 
         requestHeader.value = activeCase.ua;
     });
+}
+
+function modifyGetParams(details) {
+    if (!activeCase || !activeCase.params) {
+        return;
+    }
+
+    //准备自定义header
+    let modParamLines = activeCase.params.split('\n');
+    if (!modParamLines || modParamLines.length < 1) {
+        return;
+    }
+
+
+    let currentUrl = details.url;
+
+    let aNode = document.createElement('a');
+    aNode.style.display = 'none';
+    document.body.appendChild(aNode);
+    aNode.href = currentUrl;
+
+    let queryString = aNode.search.slice(1, aNode.search.length).concat();
+    if (!queryString && queryString.length < 1) {
+        queryString = '';
+    }
+
+    //拆解 query string 为键值对
+    let pairs = [];
+    let vars = queryString.split('&');
+    for (let i = 0; i < vars.length; i++) {
+        let pair = vars[i].split('=');
+        if (pair && pair[0] && pair[1]) {
+            pairs.push({key: decodeURIComponent(pair[0]), value: decodeURIComponent(pair[1])});
+        }
+    }
+
+    modParamLines.forEach((modParamLine)=> {
+        let index = modParamLine.indexOf('=');
+        if (index <= 0 || index == modParamLine.length - 1) {
+            return;
+        }
+
+        let key = modParamLine.slice(0, index);
+        let value = modParamLine.slice(index + 1, modParamLine.length);
+
+        let foundPair = pairs.find((pair)=> {
+            return pair.key == key
+        });
+        if (foundPair) {
+            foundPair.value = value;
+        } else {
+            pairs.push({key: key, value: decodeURIComponent(value)});
+        }
+    });
+
+    let newQuerySring = '?';
+    pairs.forEach((pair)=> {
+        newQuerySring = newQuerySring.concat(encodeURIComponent(pair.key), '=', encodeURIComponent(pair.value), '&');
+    });
+
+    if (newQuerySring.endsWith('&')) {
+        newQuerySring = newQuerySring.slice(0, newQuerySring.length - 1);
+    }
+
+    return aNode.protocol.concat('//', aNode.host, aNode.pathname, newQuerySring);
+
+
+    document.body.removeChild(aNode);
 }

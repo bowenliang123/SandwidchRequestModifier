@@ -65,7 +65,9 @@
                 {{showCase.name}}
                 <small class="text-muted"># {{showCase.caseId}}</small>
                 <!--保存按钮-->
-                <button class="btn btn-link text-primary" ng-click="saveCase(showCase.caseId)" style="float: right">
+                <button class="btn btn-link text-primary"
+                        style="float: right"
+                        ng-click="saveCase(showCase.caseId)">
                     <i class="fa fa-save"></i>
                 </button>
             </h4>
@@ -90,6 +92,17 @@
                           placeholder="key:value"
                           ng-model="showCase.headers"
                           ng-change="updateHeadersInfo()"></textarea>
+            </fieldset>
+
+            <!--params-->
+            <fieldset class="form-group">
+                <label for="getparamsTextarea">
+                    GET params
+                    <small class="text-muted">(Separated by line breaks '\n')</small>
+                </label>
+                <textarea class="form-control text-breakall" id="getparamsTextarea" rows="8"
+                          placeholder="key:value"
+                          ng-model="showCase.params"></textarea>
             </fieldset>
 
             <hr>

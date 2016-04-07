@@ -237,14 +237,16 @@ function modifyUserAgent(details) {
         return;
     }
 
-    details.requestHeaders.forEach((requestHeader)=> {
+    for (let i = 0; i < details.requestHeaders.length; i++) {
+        let requestHeader = requestHeaders[i];
         let headerName = requestHeader.name.toLowerCase();
-        if (!headerName || headerName.indexOf('user') < 0 || headerName.indexOf('agent') < 0) {
-            return;
-        }
 
-        requestHeader.value = activeCase.ua;
-    });
+        //修改user agent
+        if (headerName && headerName.indexOf('user') > 0 && headerName.indexOf('agent') > 0) {
+            requestHeader.value = activeCase.ua;
+            break;
+        }
+    }
 }
 
 function modifyGetParams(details) {
@@ -253,8 +255,8 @@ function modifyGetParams(details) {
     }
 
     //准备自定义header
-    let modParamLines = activeCase.params.split('\n');
-    if (!modParamLines || modParamLines.length < 1) {
+    let customParamLines = activeCase.params.split('\n');
+    if (!customParamLines || customParamLines.length < 1) {
         return;
     }
 
@@ -265,33 +267,31 @@ function modifyGetParams(details) {
     document.body.appendChild(aNode);
     aNode.href = currentUrl;
 
-    let queryString = aNode.search.slice(1, aNode.search.length).concat();
-    if (!queryString && queryString.length < 1) {
-        queryString = '';
-    }
+    let queryString = '' + aNode.search.slice(1, aNode.search.length).concat();
 
     //拆解 query string 为键值对
-    let pairs = [];
-    let vars = queryString.split('&');
-    for (let i = 0; i < vars.length; i++) {
-        let pair = vars[i].split('=');
-        if (pair && pair[0] && pair[1]) {
-            pairs.push({key: decodeURIComponent(pair[0]), value: decodeURIComponent(pair[1])});
+    let pairs = queryString.split('&').reduce((pairs, paramLine)=> {
+            let pair = paramLine.split('=');
+            if (pair && pair[0] && pair[1]) {
+                pairs.push({key: decodeURIComponent(pair[0]), value: decodeURIComponent(pair[1])});
+            }
+            return pairs;
         }
-    }
+        , []);
 
-    modParamLines.forEach((modParamLine)=> {
-        let index = modParamLine.indexOf('=');
-        if (index <= 0 || index == modParamLine.length - 1) {
+    customParamLines.forEach((customParamLine)=> {
+        let index = customParamLine.indexOf('=');
+        if (index <= 0 || index == customParamLine.length - 1) {
             return;
         }
 
-        let key = decodeURIComponent(modParamLine.slice(0, index));
-        let value = decodeURIComponent(modParamLine.slice(index + 1, modParamLine.length));
+        let key = decodeURIComponent(customParamLine.slice(0, index));
+        let value = decodeURIComponent(customParamLine.slice(index + 1, customParamLine.length));
 
         let foundPair = pairs.find((pair)=> {
             return pair.key == key
         });
+
         if (foundPair) {
             foundPair.value = value;
         } else {
@@ -306,17 +306,18 @@ function modifyGetParams(details) {
         , '?');
     newQueryString = newQueryString.slice(0, newQueryString.length - 1);    //删除结尾多余的&
 
-
+    //组装新URL
     let newUrl = aNode.protocol.concat('//', aNode.host, aNode.pathname, newQueryString, aNode.hash);
+
+    //cleanup
     document.body.removeChild(aNode);
+
     return newUrl;
 }
 
 function isIgnoreRequest(details) {
     let url = details.url;
-    if (!url.startsWith('http://') && !url.startsWith('https://')) {
-        return true;
-    }
 
-    return false;
+    //只对http和https协议修改请求
+    return !!(!url.startsWith('http://') && !url.startsWith('https://'));
 }

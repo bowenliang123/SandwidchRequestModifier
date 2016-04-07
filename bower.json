@@ -22,6 +22,7 @@
   "dependencies": {
     "bootstrap": "v4.0.0-alpha.2",
     "font-awesome": "fontawesome#^4.5.0",
-    "angular": "^1.5.4"
+    "angular": "^1.5.4",
+    "ua-parser-js": "^0.7.10"
   }
 }

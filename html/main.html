@@ -86,7 +86,7 @@
             <fieldset class="form-group">
                 <label for="headersTextarea">
                     Additional Headers
-                    <small class="text-muted">(Separated by line breaks '\n')</small>
+                    <small class="text-muted">以冒号:分隔键值对如key:value,以换行分隔多个键值对</small>
                 </label>
                 <textarea class="form-control text-breakall" id="headersTextarea" rows="8"
                           placeholder="key:value"
@@ -97,11 +97,11 @@
             <!--params-->
             <fieldset class="form-group">
                 <label for="getparamsTextarea">
-                    GET params
-                    <small class="text-muted">(Separated by line breaks '\n')</small>
+                    GET Params
+                    <small class="text-muted">以=分隔键值对如key=value,以换行分隔多个键值对</small>
                 </label>
                 <textarea class="form-control text-breakall" id="getparamsTextarea" rows="8"
-                          placeholder="key:value"
+                          placeholder="key=value"
                           ng-model="showCase.params"></textarea>
             </fieldset>
 

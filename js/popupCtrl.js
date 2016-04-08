@@ -56,11 +56,17 @@ angular.module('popupCtrl', [])
         $scope.createNewTabToMain = ()=> {
             chrome.tabs.create({'url': chrome.extension.getURL('html/main.html')}, function (tab) {
             });
-        }
+        };
 
         $scope.activateCase = (simCase)=> {
             //update remote
             chrome.extension.sendRequest({action: "activateCase", caseStr: angular.toJson(simCase)}, (response) => {
             })
-        }
+        };
+
+        $scope.deactivateCase = ()=> {
+            //update remote
+            chrome.extension.sendRequest({action: "deactivateCase"}, (response) => {
+            })
+        };
     }]);

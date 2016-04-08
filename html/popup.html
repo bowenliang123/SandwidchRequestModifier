@@ -30,6 +30,11 @@
         进入主界面
     </button>
 
+    <button class="btn btn-sm btn-danger btnDeactivate"
+            ng-click="deactivateCase()">
+        停止模拟
+    </button>
+
     <div class="case-list">
         <div class="sim-case"
              ng-repeat="simCase in cases"

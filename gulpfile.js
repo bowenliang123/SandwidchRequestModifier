@@ -71,7 +71,7 @@ gulp.task('clean', () => {
 });
 
 // zip
-gulp.task('zip', ['clean', 'copy'], ()=> {
+gulp.task('zip', ['build'], ()=> {
     return gulp.src('dist/**/*', {'base': '.'})
         .pipe(zip('SailFishRequester-' + getYYYYMMDDHHMM() + '.zip'))
         .pipe(gulp.dest('releases'));
@@ -79,7 +79,7 @@ gulp.task('zip', ['clean', 'copy'], ()=> {
 
 
 // Build
-gulp.task('build', ['clean', 'copy', 'zip']);
+gulp.task('build', ['clean', 'copy']);
 
 // Default
 gulp.task('default', ['watch']);
@@ -98,7 +98,9 @@ gulp.task('watch', ['build'], () => {
         'js/**/*',
 
         //依赖库
-        'bower_components/**/*',
+        'bower.json',
+        'package.json',
+        //'bower_components/**/*',
         //'node_modules/',
     ], ['build']);
 });

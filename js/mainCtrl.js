@@ -17,19 +17,20 @@ angular.module('mainCtrl', [])
             $scope.headerDescriptors = '[]';
             //$scope.headerDescriptors = angular.toJson(demoHeaderDescriptors, true);
 
-            $scope.headersInfo = [
-                {
-                    headerName: 'ucpara',
-                    headerDescription: 'UC公参',
-                    subFields: [
-                        {
-                            fieldName: 'sn',
-                            fieldValue: '123456789',
-                            fieldDescription: 'sn 就是一个 sn'
-                        }
-                    ]
-                }
-            ];
+            $scope.headersInfo = [];
+            //$scope.headersInfo = [
+            //    {
+            //        headerName: 'ucpara',
+            //        headerDescription: 'UC公参',
+            //        subFields: [
+            //            {
+            //                fieldName: 'sn',
+            //                fieldValue: '123456789',
+            //                fieldDescription: 'sn 就是一个 sn'
+            //            }
+            //        ]
+            //    }
+            //];
 
             getHeaderDescriptors();
 
@@ -337,23 +338,31 @@ angular.module('mainCtrl', [])
          * @param simCaseId
          */
         $scope.saveCase = (simCaseId)=> {
+            if (!simCaseId) {
+                alert('当前用例为空');
+                return;
+            }
+
             if (!$scope.cases) {
                 return;
             }
 
-            let targetCase = $scope.cases.filter((item)=>(item.caseId == simCaseId));
+            let targetCase = $scope.cases.find((item)=>(item.caseId == simCaseId));
             if (!targetCase) {
+                alert('未找到要保存的用例');
                 return;
             }
 
-            targetCase[0] = $scope.showCase;
+            //更新并持久化用例
+            targetCase = $scope.showCase;
+            $scope.persistAllCases($scope.cases);
 
+            //若保存的当前用例为激活用例，重新激活一次
             if ($scope.activeCase && simCaseId == $scope.activeCase.caseId) {
-                $scope.activateCase($scope.showCase);
+                $scope.activateCase(targetCase);
             }
 
-            //持久化所有用例
-            $scope.persistAllCases($scope.cases);
+            alert('保存成功');
         };
 
         /**

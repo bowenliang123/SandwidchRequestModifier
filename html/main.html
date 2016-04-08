@@ -62,12 +62,21 @@
         <!--左栏-->
         <div class="col-sm-9">
             <h4>
-                {{showCase.name}}
-                <small class="text-muted"># {{showCase.caseId}}</small>
+                <!--用例名称-->
+                <span ng-if="(showCase!=undefined)">{{showCase.name}}</span>
+
+                <!--用例ID-->
+                <small class="text-muted">
+                    # {{showCase.caseId}}
+                    <!--当前用例为空时提示文本-->
+                    <span ng-if="(showCase==undefined)">未选定用例</span>
+                </small>
+
                 <!--保存按钮-->
                 <button class="btn btn-link text-primary"
                         style="float: right"
-                        ng-click="saveCase(showCase.caseId)">
+                        ng-click="saveCase(showCase.caseId)"
+                        ng-disabled="(showCase==undefined)">
                     <i class="fa fa-save"></i>
                 </button>
             </h4>
@@ -88,7 +97,7 @@
                     Additional Headers
                     <small class="text-muted">以冒号:分隔键值对如key:value,以换行分隔多个键值对</small>
                 </label>
-                <textarea class="form-control text-breakall" id="headersTextarea" rows="8"
+                <textarea class="form-control text-breakall" id="headersTextarea" rows="6"
                           placeholder="key:value"
                           ng-model="showCase.headers"
                           ng-change="updateHeadersInfo()"></textarea>
@@ -98,9 +107,9 @@
             <fieldset class="form-group">
                 <label for="getparamsTextarea">
                     GET Params
-                    <small class="text-muted">以=分隔键值对如key=value,以换行分隔多个键值对</small>
+                    <small class="text-muted">以等号=分隔键值对如key=value,以换行分隔多个键值对</small>
                 </label>
-                <textarea class="form-control text-breakall" id="getparamsTextarea" rows="8"
+                <textarea class="form-control text-breakall" id="getparamsTextarea" rows="6"
                           placeholder="key=value"
                           ng-model="showCase.params"></textarea>
             </fieldset>
@@ -109,10 +118,10 @@
 
             <!--UA 信息-->
             <div>
-                <h4>
+                <h5>
                     UA 信息
                     <small class="text-muted">仅供参考</small>
-                </h4>
+                </h5>
                 <table class="table table-striped table-bordered">
                     <thead>
                     <tr>
@@ -135,7 +144,7 @@
 
             <!--header 信息-->
             <div>
-                <h4>Header 信息</h4>
+                <h5>Header 信息</h5>
                 <div class="row"
                      ng-repeat="headerInfo in headersInfo">
 
@@ -177,7 +186,7 @@
         <!--右栏-->
         <div class="col-sm-3">
 
-            <div class="row">
+            <div class="row m-b-1">
                 <div class="col-sm-4 p-x-0">
                     <!--新建按钮-->
                     <button class="btn btn-link btn-block"
@@ -187,19 +196,25 @@
                 </div>
 
                 <div class="col-sm-4 p-x-0">
+                    <!--用例导入按钮-->
                     <button class="btn btn-link btn-block"
                             ng-click="importCases()">
                         <i class="fa fa-upload"></i>
                     </button>
                 </div>
                 <div class="col-sm-4 p-x-0">
+                    <!--用例导出按钮-->
                     <button class="btn btn-link btn-block"
                             ng-click="exportCases()">
                         <i class="fa fa-download"></i>
                     </button>
                 </div>
             </div>
-            <hr>
+
+            <!--用例列表-->
+            <div ng-if="!cases||cases.length<1">
+                <p class="text-sm-center"> 目前没有用例 </p>
+            </div>
             <div class="row simCase"
                  ng-repeat="onecase in cases"
                  ng-click="changeShowCase(onecase)">
@@ -219,23 +234,25 @@
     </div>
 
     <!--解析器规则-->
-    <nav class="navbar navbar-light bg-faded">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#exCollapsingNavbar">
-            &#9776; 解析器规则
-        </button>
-    </nav>
+    <div class="m-y-2">
+        <nav class="navbar navbar-light bg-faded">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#exCollapsingNavbar">
+                &#9776; 解析器规则
+            </button>
+        </nav>
 
-    <div class="collapse" id="exCollapsingNavbar">
-        <div class="p-a-1">
-            <h4>Header 描述规则
-                <small>
-                    <button class="btn btn-primary" ng-click="saveHeaderDescriptors()">
-                        <i class="fa fa-save"></i>
-                    </button>
-                </small>
-            </h4>
+        <div class="collapse" id="exCollapsingNavbar">
+            <div class="p-a-1">
+                <h4>Header 描述规则
+                    <small>
+                        <button class="btn btn-primary" ng-click="saveHeaderDescriptors()">
+                            <i class="fa fa-save"></i>
+                        </button>
+                    </small>
+                </h4>
             <textarea class="form-control text-breakall" rows="30"
                       ng-model="headerDescriptors"></textarea>
+            </div>
         </div>
     </div>
 </div>

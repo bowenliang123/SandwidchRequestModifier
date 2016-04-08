@@ -31,6 +31,8 @@ gulp.task('copyBower', ['clean'], ()=> {
             //ua-parser-js
             'bower_components/ua-parser-js/dist/**/*',
 
+            //jquery-elastic
+            'bower_components/jquery-elastic/jquery.elastic.source.js',
         ], {'base': '.'})
         .pipe(gulp.dest('dist/'));
 });
@@ -38,15 +40,15 @@ gulp.task('copyBower', ['clean'], ()=> {
 // 复制必要的文件
 gulp.task('copyNpm', ['clean'], ()=> {
     return gulp.src([
-            //querystring
-            'node_modules/querystring/**/*',
+            //
+            //'node_modules//**/*',
 
         ], {'base': '.'})
         .pipe(gulp.dest('dist/'));
 });
 
 // 复制必要的文件
-gulp.task('copy', ['clean', 'copyBower', 'copyNpm'], ()=> {
+gulp.task('copy', ['clean', 'copyBower'], ()=> {
     return gulp.src([
             'manifest.json',
             'html/*',
@@ -97,6 +99,6 @@ gulp.task('watch', ['build'], () => {
 
         //依赖库
         'bower_components/**/*',
-        'node_modules/',
+        //'node_modules/',
     ], ['build']);
 });

@@ -23,6 +23,7 @@
 
     <!--lib-->
     <script src="../bower_components/ua-parser-js/dist/ua-parser.min.js"></script>
+    <script src="../bower_components/jquery-elastic/jquery.elastic.source.js"></script>
 
     <!--angular app-->
     <script src="../js/app.js"></script>
@@ -46,7 +47,7 @@
         <form class="form-inline pull-xs-right">
             <a class="nav-item nav-link text-primary" href="#" ng-if="activeCase">
                 Simulating: {{activeCase.name}}
-                <span class="text-muted">(#{{activeCase.caseId}})</span>
+                <small class="text-muted">(#{{activeCase.caseId}})</small>
             </a>
             <a class="nav-item nav-link text-info" href="#" ng-if="!activeCase">
                 No active case.
@@ -92,9 +93,9 @@
                           ng-change="updateUaInfo()"></textarea>
                 <p>
                     <small class="text-muted" ng-if="(uaInfo!=undefined)">
+                        <span class="m-l-1">(参考)</span>
                         <span class="text-danger">操作系统 {{uaInfo.os.name}} {{uaInfo.os.version}}</span>
                         <span class="text-primary m-l-1">浏览器 {{uaInfo.browser.name}} {{uaInfo.browser.version}}</span>
-                        <span class="m-l-1">(仅供参考)</span>
                     </small>
                 </p>
             </fieldset>
@@ -105,7 +106,7 @@
                     Custom Headers
                     <small class="text-muted">以冒号:分隔键值对如key:value,以换行分隔多个键值对</small>
                 </label>
-                <textarea class="form-control text-breakall" id="headersTextarea" rows="6"
+                <textarea class="form-control text-breakall" id="headersTextarea" rows="3"
                           placeholder="key:value"
                           ng-model="showCase.headers"
                           ng-change="updateHeadersInfo()"></textarea>
@@ -117,7 +118,7 @@
                     GET Params
                     <small class="text-muted">以等号=分隔键值对如key=value,以换行分隔多个键值对</small>
                 </label>
-                <textarea class="form-control text-breakall" id="getparamsTextarea" rows="6"
+                <textarea class="form-control text-breakall" id="getparamsTextarea" rows="3"
                           placeholder="key=value"
                           ng-model="showCase.params"></textarea>
             </fieldset>

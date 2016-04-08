@@ -39,6 +39,10 @@ angular.module('mainCtrl', [])
             getActiveCase();
 
             addInputLIstener();
+            $('#uaTextarea').elastic();
+            $('#headersTextarea').elastic();
+            $('#getparamsTextarea').elastic();
+
         })();
 
         function getAllCases() {

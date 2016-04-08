@@ -405,7 +405,6 @@ angular.module('mainCtrl', [])
         $scope.updateHeadersInfo = ()=> {
 
             try {
-                console.log($scope.headerDescriptors);
                 let headersInfo = parseHeaders($scope.showCase.headers, angular.fromJson($scope.headerDescriptors));
 
                 $scope.headersInfo = headersInfo;

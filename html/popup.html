@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html ng-app="popupCtrl">
+<head>
+    <meta charset="UTF-8">
+    <title>Sailfish Requester Popup</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.min.css">
+
+
+    <!--app css-->
+    <link rel="stylesheet" href="../css/popup.css">
+
+    <!-- jQuery first, then Bootstrap JS. -->
+    <script src="../bower_components/jquery/dist/jquery.min.js"></script>
+    <!--<script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>-->
+
+    <!-- angular v1 -->
+    <script src="../bower_components/angular/angular.min.js"></script>
+
+    <!--angular app-->
+    <script src="../js/popupCtrl.js"></script>
+</head>
+<body ng-controller="popupCtrl">
+
+<div style="width: 150px">
+
+    <button class="btn btn-sm btn-primary btnMain"
+            ng-click="createNewTabToMain()">
+        进入主界面
+    </button>
+
+    <div class="case-list">
+        <div class="sim-case"
+             ng-repeat="simCase in cases"
+             ng-click="activateCase(simCase)">
+            {{simCase.name}}
+            <!--<span class="label label-default label-pill pull-xs-right">0</span>-->
+        </div>
+    </div>
+</div>
+<div tabindex="1">
+
+</div>
+</body>
+</html>

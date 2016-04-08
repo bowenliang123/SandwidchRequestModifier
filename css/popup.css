@@ -1,0 +1,19 @@
+.btnMain{
+    margin: 2%;
+    width: 96%;
+}
+
+.case-list{
+
+}
+
+.case-list .sim-case{
+    margin: 2px;
+    border: 1px solid lightgrey;
+    text-align: center;
+}
+
+.case-list .sim-case:hover{
+    cursor: pointer;
+    background: lightgrey;
+}

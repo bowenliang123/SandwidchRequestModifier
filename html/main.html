@@ -73,8 +73,7 @@
                 </small>
 
                 <!--保存按钮-->
-                <button class="btn btn-link text-primary"
-                        style="float: right"
+                <button class="btn btn-link text-primary pull-xs-right"
                         ng-click="saveCase(showCase.caseId)"
                         ng-disabled="(showCase==undefined)">
                     <i class="fa fa-save"></i>
@@ -84,17 +83,26 @@
 
             <!--UA-->
             <fieldset class="form-group">
-                <label for="uaTextarea">Custom User Agent</label>
+                <label for="uaTextarea">
+                    Custom User Agent
+                </label>
                 <textarea class="form-control text-breakall" id="uaTextarea" rows="2"
                           placeholder="using default user agent string"
                           ng-model="showCase.ua"
                           ng-change="updateUaInfo()"></textarea>
+                <p>
+                    <small class="text-muted" ng-if="(uaInfo!=undefined)">
+                        <span class="text-danger">操作系统 {{uaInfo.os.name}} {{uaInfo.os.version}}</span>
+                        <span class="text-primary m-l-1">浏览器 {{uaInfo.browser.name}} {{uaInfo.browser.version}}</span>
+                        <span class="m-l-1">(仅供参考)</span>
+                    </small>
+                </p>
             </fieldset>
 
             <!--headers-->
             <fieldset class="form-group">
                 <label for="headersTextarea">
-                    Additional Headers
+                    Custom Headers
                     <small class="text-muted">以冒号:分隔键值对如key:value,以换行分隔多个键值对</small>
                 </label>
                 <textarea class="form-control text-breakall" id="headersTextarea" rows="6"
@@ -115,32 +123,6 @@
             </fieldset>
 
             <hr>
-
-            <!--UA 信息-->
-            <div>
-                <h5>
-                    UA 信息
-                    <small class="text-muted">仅供参考</small>
-                </h5>
-                <table class="table table-striped table-bordered">
-                    <thead>
-                    <tr>
-                        <th>操作系统</th>
-                        <th>浏览器</th>
-                        <th>版本</th>
-                        <th>内核</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td id="system">{{uaInfo.os.name}} {{uaInfo.os.version}}</td>
-                        <td id="browser_name">{{uaInfo.browser.name}}</td>
-                        <td id="browser_version">{{uaInfo.browser.version}}</td>
-                        <td id="browser_engine">{{uaInfo.engine.name}} {{uaInfo.engine.version}}</td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
 
             <!--header 信息-->
             <div>

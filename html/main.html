@@ -91,10 +91,10 @@
                           placeholder="using default user agent string"
                           ng-model="showCase.ua"
                           ng-change="updateUaInfo()"></textarea>
-                <p>
+                <p class="m-a-0">
                     <small class="text-muted" ng-if="(uaInfo!=undefined)">
-                        <span class="m-l-1">(参考)</span>
-                        <span class="text-danger">操作系统 {{uaInfo.os.name}} {{uaInfo.os.version}}</span>
+                        <span class="m-l-1">(参考信息)</span>
+                        <span class="text-danger m-l-1">操作系统 {{uaInfo.os.name}} {{uaInfo.os.version}}</span>
                         <span class="text-primary m-l-1">浏览器 {{uaInfo.browser.name}} {{uaInfo.browser.version}}</span>
                     </small>
                 </p>
@@ -170,7 +170,7 @@
         <div class="col-sm-3">
 
             <div class="row m-b-1">
-                <div class="col-sm-4 p-x-0">
+                <div class="col-xs-4 p-x-0">
                     <!--新建按钮-->
                     <button class="btn btn-link btn-block"
                             ng-click="createNewCase()">
@@ -178,14 +178,14 @@
                     </button>
                 </div>
 
-                <div class="col-sm-4 p-x-0">
+                <div class="col-xs-4 p-x-0">
                     <!--用例导入按钮-->
                     <button class="btn btn-link btn-block"
                             ng-click="importCases()">
                         <i class="fa fa-upload"></i>
                     </button>
                 </div>
-                <div class="col-sm-4 p-x-0">
+                <div class="col-xs-4 p-x-0">
                     <!--用例导出按钮-->
                     <button class="btn btn-link btn-block"
                             ng-click="exportCases()">
@@ -201,15 +201,15 @@
             <div class="row simCase"
                  ng-repeat="onecase in cases"
                  ng-click="changeShowCase(onecase)">
-                <div class="col-sm-6">
+                <div class="col-xs-6 m-x-0">
                     {{onecase.name}}
                 </div>
                 <!--激活按钮-->
-                <div class="col-sm-2" ng-click="activateCase(onecase)">
+                <div class="col-xs-2 m-x-0" ng-click="activateCase(onecase)">
                     <button class="btn btn-success btn-sm"><i class="fa fa-play"></i></button>
                 </div>
                 <!--删除按钮-->
-                <div class="col-sm-2" ng-click="removeCase(onecase.caseId)">
+                <div class="col-xs-2 m-x-0" ng-click="removeCase(onecase.caseId)">
                     <button class="btn btn-danger btn-sm"><i class="fa fa-times"></i></button>
                 </div>
             </div>

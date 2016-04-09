@@ -209,7 +209,7 @@ function modifyUserAgent(details) {
         let headerName = requestHeader.name.toLowerCase();
 
         //修改user agent
-        if (headerName && headerName.indexOf('user') > 0 && headerName.indexOf('agent') > 0) {
+        if (headerName && headerName.startsWith('user') && headerName.indexOf('agent') > 0) {
             requestHeader.value = activeCase.ua;
             break;
         }

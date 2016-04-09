@@ -30,5 +30,16 @@
   },
   "browser_action": {
     "default_popup": "html/popup.html"
-  }
+  },
+  "content_scripts": [
+    {
+      "run_at": "document_start",
+      "matches": [
+        "*://*/*"
+      ],
+      "js": [
+        "js/content_script.js"
+      ]
+    }
+  ]
 }

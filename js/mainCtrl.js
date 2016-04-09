@@ -335,6 +335,11 @@ angular.module('mainCtrl', [])
 
             //持久化所有用例
             $scope.persistAllCases($scope.cases);
+
+            //若删除的当前用例为激活用例，取消激活状态
+            if ($scope.activeCase && simCaseId == $scope.activeCase.caseId) {
+                $scope.deactivateCase();
+            }
         };
 
         /**

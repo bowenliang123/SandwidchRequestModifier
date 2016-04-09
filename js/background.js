@@ -46,7 +46,7 @@ let demoCases = [
     //https://developer.chrome.com/extensions/webRequest#event-onBeforeRequest
     chrome.webRequest.onBeforeRequest.addListener(
         function (details) {
-            if (isIgnoreRequest(details)) {
+            if (isIgnoredRequest(details)) {
                 return;
             }
 
@@ -66,7 +66,7 @@ let demoCases = [
         function (details) {
             //console.log(details);
 
-            if (isIgnoreRequest(details)) {
+            if (isIgnoredRequest(details)) {
                 return;
             }
 
@@ -95,13 +95,13 @@ let demoCases = [
 
             //激活用例
             else if (request.action == "activateCase") {
-                let simCase = JSON.parse(request.caseStr);
-                activateCase(simCase);
+                let simCase = parseActiveCase(request.caseStr);
+                saveActiveCase(simCase);
             }
 
             //关闭用例
             else if (request.action == "deactivateCase") {
-                deactivateCase(request.caseStr);
+                saveActiveCase(null);
             }
 
             //获取激活的用例
@@ -185,51 +185,18 @@ function fetchActiveCase(callback) {
 }
 
 function saveActiveCase(simCase) {
-    //activeCase = simCase;
-
     chrome.storage.sync.set({'activeCase': simCase}, () => {
         console.log('saveActiveCase finished.');
     });
 }
 
-function activateCase(simCase) {
-    saveActiveCase(simCase);
-}
-
-function deactivateCase() {
-    saveActiveCase(null);
-}
-
 function modifyHeaders(details) {
-    if (!activeCase || !activeCase.headers) {
+    if (!activeCase || !activeCase.parsedHeaders || activeCase.parsedHeaders == {}) {
         return;
     }
-
-    //准备自定义header
-    let modHeaderLines = activeCase.headers.split('\n');
-    if (!modHeaderLines || modHeaderLines.length < 1) {
-        return;
-    }
-
-    let customHeaders = modHeaderLines.reduce((customHeaders, modHeaderStr)=> {
-        if (!modHeaderStr || modHeaderStr.indexOf(':') < 0) {
-            return customHeaders;
-        }
-
-        let index = modHeaderStr.indexOf(':');
-        if (index <= 0 || index == modHeaderStr.length - 1) {
-            return customHeaders;
-        }
-
-        let headerKey = modHeaderStr.slice(0, index);
-        let headerValue = modHeaderStr.slice(index + 1, modHeaderStr.length);
-        //加入自定义header
-        customHeaders[headerKey] = headerValue;
-        return customHeaders;
-    }, {});
 
     //增加到请求的 header
-    appendHeaders(details.requestHeaders, customHeaders);
+    appendHeaders(details.requestHeaders, activeCase.parsedHeaders);
 }
 
 function modifyUserAgent(details) {
@@ -250,13 +217,7 @@ function modifyUserAgent(details) {
 }
 
 function modifyGetParams(details) {
-    if (!activeCase || !activeCase.params) {
-        return;
-    }
-
-    //准备自定义header
-    let customParamLines = activeCase.params.split('\n');
-    if (!customParamLines || customParamLines.length < 1) {
+    if (!activeCase || !activeCase.parsedParams || activeCase.parsedParams == {}) {
         return;
     }
 
@@ -267,7 +228,7 @@ function modifyGetParams(details) {
     document.body.appendChild(aNode);
     aNode.href = currentUrl;
 
-    let queryString = '' + aNode.search.slice(1, aNode.search.length).concat();
+    let queryString = '' + aNode.search.slice(1, aNode.search.length);
 
     //拆解 query string 为键值对
     let pairs = queryString.split('&').reduce((pairs, paramLine)=> {
@@ -279,23 +240,14 @@ function modifyGetParams(details) {
         }
         , []);
 
-    customParamLines.forEach((customParamLine)=> {
-        let index = customParamLine.indexOf('=');
-        if (index <= 0 || index == customParamLine.length - 1) {
-            return;
-        }
+    activeCase.parsedParams.forEach((param)=> {
 
-        let key = decodeURIComponent(customParamLine.slice(0, index));
-        let value = decodeURIComponent(customParamLine.slice(index + 1, customParamLine.length));
-
-        let foundPair = pairs.find((pair)=> {
-            return pair.key == key
-        });
+        let foundPair = pairs.find((pair)=> pair.key == param.key);
 
         if (foundPair) {
-            foundPair.value = value;
+            foundPair.value = param.value;
         } else {
-            pairs.push({key: key, value: value});
+            pairs.push({key: param.key, value: param.value});
         }
     });
 
@@ -315,9 +267,79 @@ function modifyGetParams(details) {
     return newUrl;
 }
 
-function isIgnoreRequest(details) {
+function isIgnoredRequest(details) {
     let url = details.url;
 
     //只对http和https协议修改请求
-    return !!(!url.startsWith('http://') && !url.startsWith('https://'));
+    return !(url.startsWith('http://') || url.startsWith('https://'));
+}
+
+/**
+ * 解析激活用例
+ */
+function parseActiveCase(simCaseStr) {
+
+    function parseHeaders(simCase) {
+        //parse headers
+        if (!simCase.headers || simCase.headers == '') {
+            simCase.headers = undefined;
+        } else {
+            let customHeaderLines = simCase.headers.split('\n');
+            simCase.parsedHeaders = customHeaderLines.reduce((headers, customHeaderLine)=> {
+                    let index = customHeaderLine.indexOf(':');
+                    if (index <= 0 || index == customHeaderLine.length - 1) {
+                        return headers;
+                    }
+
+                    let key = decodeURIComponent(customHeaderLine.slice(0, index));
+                    let value = decodeURIComponent(customHeaderLine.slice(index + 1, customHeaderLine.length));
+
+                    headers[key] = value;
+                    return headers;
+                }
+                , {});
+        }
+    }
+
+    function parseParams(simCase) {
+        //params
+        if (!simCase.params || simCase.params == '') {
+            simCase.params = undefined;
+        } else {
+            let customParamLines = simCase.params.split('\n');
+            simCase.parsedParams = customParamLines.reduce((params, customParamLine)=> {
+                    let index = customParamLine.indexOf('=');
+                    if (index <= 0 || index == customParamLine.length - 1) {
+                        return params;
+                    }
+
+                    let key = decodeURIComponent(customParamLine.slice(0, index));
+                    let value = decodeURIComponent(customParamLine.slice(index + 1, customParamLine.length));
+
+                    return params.concat({key: key, value: value});
+                }
+                , []);
+        }
+    }
+
+    let simCase;
+    try {
+        simCase = JSON.parse(simCaseStr);
+    } catch (e) {
+        return;
+    }
+
+    //UA
+    if (simCase.ua == '') {
+        simCase.ua = undefined;
+    }
+
+    //解析 headers
+    parseHeaders(simCase);
+
+    //解析 params
+    parseParams(simCase);
+
+    return simCase;
+
 }

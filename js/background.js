@@ -240,14 +240,18 @@ function modifyGetParams(details) {
         }
         , []);
 
-    activeCase.parsedParams.forEach((param)=> {
 
-        let foundPair = pairs.find((pair)=> pair.key == param.key);
+    let keys = Object.keys(activeCase.parsedParams);
+    keys.forEach((key)=> {
+
+        //activeCase.parsedParams.forEach((param)=> {
+        let value = activeCase.parsedParams[key];
+        let foundPair = pairs.find((pair)=> pair.key == key);
 
         if (foundPair) {
-            foundPair.value = param.value;
+            foundPair.value = value;
         } else {
-            pairs.push({key: param.key, value: param.value});
+            pairs.push({key: key, value: value});
         }
     });
 
@@ -316,9 +320,10 @@ function parseActiveCase(simCaseStr) {
                     let key = decodeURIComponent(customParamLine.slice(0, index));
                     let value = decodeURIComponent(customParamLine.slice(index + 1, customParamLine.length));
 
-                    return params.concat({key: key, value: value});
+                    params[key] = value;
+                    return params;
                 }
-                , []);
+                , {});
         }
     }
 

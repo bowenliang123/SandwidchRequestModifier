@@ -47,10 +47,10 @@
                 Simulating: <strong>{{activeCase.name}}</strong>
                 <small class="text-muted">(#{{activeCase.caseId}})</small>
             </a>
-            <a class="nav-item nav-link text-info m-r-1" href="#" ng-if="!activeCase">
+            <a class="nav-item nav-link text-info" href="#" ng-if="!activeCase">
                 No active case.
             </a>
-            <button class="btn btn-danger-outline"
+            <button class="btn btn-danger-outline m-l-1"
                     ng-click="deactivateCase()" ng-disabled="(activeCase==undefined)">
                 <i class="fa fa-stop"></i>
             </button>

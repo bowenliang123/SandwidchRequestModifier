@@ -23,7 +23,7 @@
 </head>
 <body ng-controller="popupCtrl">
 
-<div style="width: 150px">
+<div style="width: 180px">
 
     <button class="btn btn-sm btn-primary btnMain"
             ng-click="createNewTabToMain()">
@@ -36,7 +36,7 @@
     </button>
 
     <div class="case-list">
-        <div class="sim-case"
+        <div class="sim-case text-breakall"
              ng-repeat="simCase in cases"
              ng-click="activateCase(simCase)">
             {{simCase.name}}

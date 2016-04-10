@@ -1,3 +1,7 @@
+.text-breakall {
+    word-break: break-all;
+}
+
 .btnMain {
     margin: 2%;
     width: 96%;

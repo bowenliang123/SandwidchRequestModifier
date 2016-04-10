@@ -47,10 +47,10 @@
                 Simulating: <strong>{{activeCase.name}}</strong>
                 <small class="text-muted">(#{{activeCase.caseId}})</small>
             </a>
-            <a class="nav-item nav-link text-info" href="#" ng-if="!activeCase">
+            <a class="nav-item nav-link text-info m-r-1" href="#" ng-if="!activeCase">
                 No active case.
             </a>
-            <button class="btn btn-link text-danger"
+            <button class="btn btn-danger-outline"
                     ng-click="deactivateCase()" ng-disabled="(activeCase==undefined)">
                 <i class="fa fa-stop"></i>
             </button>
@@ -105,6 +105,11 @@
                             <span class="m-l-1">(参考信息)</span>
                             <span class="text-danger m-l-1">操作系统: {{uaInfo.os.name}} {{uaInfo.os.version}}</span>
                             <span class="text-primary m-l-1">浏览器: {{uaInfo.browser.name}} {{uaInfo.browser.version}}</span>
+
+                            <span class="pull-right"
+                                  ng-click="showCase.ua=''">
+                                <i class="fa fa-times"></i> Clear
+                            </span>
                         </small>
                     </p>
                 </div>
@@ -121,7 +126,13 @@
                               placeholder="key:value"
                               ng-model="showCase.headers"
                               ng-change="updateHeadersInfo()"></textarea>
-                    <small class="text-muted">自定义 header，以冒号:分隔键值对如key:value，以换行分隔多个键值对</small>
+                    <small class="text-muted">
+                        自定义 header，以冒号:分隔键值对如key:value，以换行分隔多个键值对
+                        <span class="pull-right"
+                              ng-click="showCase.headers=''">
+                            <i class="fa fa-times"></i> Clear
+                        </span>
+                    </small>
                 </div>
             </fieldset>
 
@@ -134,7 +145,13 @@
                     <textarea class="form-control text-breakall" id="getparamsTextarea" rows="3"
                               placeholder="key=value"
                               ng-model="showCase.params"></textarea>
-                    <small class="text-muted">自定义 GET 参数，以等号=分隔键值对如key=value，以换行分隔多个键值对</small>
+                    <small class="text-muted">
+                        自定义 GET 参数，以等号=分隔键值对如key=value，以换行分隔多个键值对
+                        <span class="pull-right"
+                              ng-click="showCase.params=''">
+                               <i class="fa fa-times"></i> Clear
+                         </span>
+                    </small>
                 </div>
             </fieldset>
 
@@ -213,19 +230,22 @@
             <div ng-if="!cases||cases.length<1">
                 <p class="text-sm-center"> 目前没有用例 </p>
             </div>
-            <div class="row simCase"
+            <div class="simCase"
                  ng-repeat="onecase in cases"
                  ng-click="changeShowCase(onecase)">
-                <div class="col-xs-6 m-x-0 p-l-0 text-breakall">
+                <div class=" text-breakall">
+                    <div class="btn-group btn-group-sm pull-right" role="group" aria-label="Basic example">
+                        <!--激活按钮-->
+                        <button class="btn btn-success-outline">
+                            <i class="fa fa-play"></i>
+                        </button>
+                        <!--删除按钮-->
+                        <button class="btn btn-danger-outline">
+                            <i class="fa fa-times"></i>
+                        </button>
+                    </div>
+
                     {{onecase.name}}
-                </div>
-                <!--激活按钮-->
-                <div class="col-xs-3 m-x-0 p-l-0" ng-click="activateCase(onecase)">
-                    <button class="btn btn-success btn-sm btn-block"><i class="fa fa-play"></i></button>
-                </div>
-                <!--删除按钮-->
-                <div class="col-xs-3 m-x-0 p-l-0" ng-click="removeCase(onecase.caseId)">
-                    <button class="btn btn-danger btn-sm btn-block"><i class="fa fa-times"></i></button>
                 </div>
             </div>
         </div>

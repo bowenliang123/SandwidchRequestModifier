@@ -34,18 +34,10 @@ let demoCases = [
     //获取激活的用例
     fetchActiveCase();
 
-
-    //// 监听 Browser Actions 按钮点击事件
-    //chrome.browserAction.onClicked.addListener(function (tab) {
-    //    //打开选项页
-    //    chrome.tabs.create({'url': chrome.extension.getURL('html/main.html')}, function (tab) {
-    //    });
-    //});
-
     //监听所有请求，header发出前对请求进行修改
     //https://developer.chrome.com/extensions/webRequest#event-onBeforeRequest
     chrome.webRequest.onBeforeRequest.addListener(
-        function (details) {
+        (details) => {
             if (isIgnoredRequest(details)) {
                 return;
             }
@@ -63,7 +55,7 @@ let demoCases = [
     //监听所有请求，header发出前对请求进行修改
     //https://developer.chrome.com/extensions/webRequest#event-onBeforeSendHeaders
     chrome.webRequest.onBeforeSendHeaders.addListener(
-        function (details) {
+        (details) => {
             //console.log(details);
 
             if (isIgnoredRequest(details)) {
@@ -80,7 +72,7 @@ let demoCases = [
 
 //监听请求
     chrome.extension.onRequest.addListener(
-        function (request, sender, sendResponse) {
+        (request, sender, sendResponse) => {
             if (request.action == "getAllCases") {
                 getAllCases((cases)=> {
                     sendResponse({cases: cases});
@@ -116,7 +108,7 @@ let demoCases = [
         });
 
 //监听chrome storage 变化
-    chrome.storage.onChanged.addListener(function (changes, namespace) {
+    chrome.storage.onChanged.addListener((changes, namespace) => {
         for (let key in changes) {
             if (key == 'activeCase') {
                 fetchActiveCase();
@@ -183,7 +175,11 @@ function modifyHeaders(details) {
     }
 
     //增加到请求的 header
-    $.extend(details.requestHeaders, activeCase.parsedHeaders);
+    let keys = Object.keys(activeCase.parsedHeaders);
+    keys.forEach((key)=> {
+        //添加到真正的header
+        details.requestHeaders.push({name: key, value: activeCase.parsedHeaders[key]});
+    })
 }
 
 function modifyUserAgent(details) {

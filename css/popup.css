@@ -3,17 +3,18 @@
 }
 
 .btnMain {
-    margin: 2%;
-    width: 96%;
+    margin: 1%;
+    width: 48%;
+    font-size: 0.8em;
 }
 
 .btnDeactivate {
-    margin: 2%;
-    width: 96%;
+    margin: 1%;
+    width: 48%;
+    font-size: 0.8em;
 }
 
 .case-list {
-
 }
 
 .case-list .sim-case {

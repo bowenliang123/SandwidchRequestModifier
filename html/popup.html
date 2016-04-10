@@ -7,6 +7,8 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.min.css">
 
+    <!--fontawesome css-->
+    <link rel="stylesheet" href="../bower_components/font-awesome/css/font-awesome.min.css">
 
     <!--app css-->
     <link rel="stylesheet" href="../css/popup.css">
@@ -23,17 +25,23 @@
 </head>
 <body ng-controller="popupCtrl">
 
-<div style="width: 180px">
+<div style="width: 200px">
 
-    <button class="btn btn-sm btn-primary btnMain"
-            ng-click="createNewTabToMain()">
-        进入主界面
-    </button>
+    <div class="">
+        <button class="btn btn-sm btn-danger-outline btnDeactivate col-xs-6"
+                ng-click="deactivateCase()">
+            <i class="fa fa-stop-circle"></i>
+            停止模拟
+        </button>
 
-    <button class="btn btn-sm btn-danger btnDeactivate"
-            ng-click="deactivateCase()">
-        停止模拟
-    </button>
+        <button class="btn btn-sm btn-primary-outline btnMain col-xs-6"
+                ng-click="createNewTabToMain()">
+            <i class="fa fa-tachometer"></i>
+            主界面
+        </button>
+
+        <div style="font-size: 1px;"> &nbsp; </div>
+    </div>
 
     <div class="case-list">
         <div class="sim-case text-breakall"
@@ -44,8 +52,8 @@
         </div>
     </div>
 </div>
-<div tabindex="1">
 
+<div tabindex="1" >
 </div>
 </body>
 </html>

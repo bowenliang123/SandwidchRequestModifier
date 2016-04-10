@@ -23,6 +23,7 @@
     "keyword": "Sailfish"
   },
   "options_page": "html/main.html",
+  "devtools_page": "html/devtools.html",
   "background": {
     "scripts": [
       "js/background.js"

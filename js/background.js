@@ -242,10 +242,10 @@ function modifyGetParams(details) {
     let newQueryString = pairs.reduce(
         (newQueryString, pair)=>
             newQueryString.concat(encodeURIComponent(pair.key), '=', encodeURIComponent(pair.value), '&')
-        , '?');
+        , '');
 
     //组装新URL
-    aNode.search = newQueryString.slice(0, newQueryString.length - 1);   //删除结尾多余的'&'
+    aNode.search = '?' + newQueryString.slice(0, newQueryString.length - 1);   //删除结尾多余的'&'
     let newUrl = aNode.href;
 
     //cleanup

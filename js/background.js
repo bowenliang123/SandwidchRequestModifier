@@ -228,19 +228,19 @@ function modifyGetParams(details) {
         , []);
 
 
-    let keys = Object.keys(activeCase.parsedParams);
-    keys.forEach((key)=> {
+    pairs = Object.keys(activeCase.parsedParams).reduce((pairs, key)=> {
+            let value = activeCase.parsedParams[key];
+            let foundPair = pairs.find((pair)=> pair.key == key);
 
-        //activeCase.parsedParams.forEach((param)=> {
-        let value = activeCase.parsedParams[key];
-        let foundPair = pairs.find((pair)=> pair.key == key);
-
-        if (foundPair) {
-            foundPair.value = value;
-        } else {
-            pairs.push({key: key, value: value});
+            if (foundPair) {
+                foundPair.value = value;
+                return pairs;
+            } else {
+                pairs.push({key: key, value: value});
+                return pairs;
+            }
         }
-    });
+        , pairs);
 
     //组装新query string
     let newQueryString = pairs.reduce(

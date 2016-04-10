@@ -53,20 +53,31 @@ angular.module('popupCtrl', [])
             });
         }
 
+        //close popup
+        function closePopup() {
+            window.close();
+        }
+
         $scope.createNewTabToMain = ()=> {
             chrome.tabs.create({'url': chrome.extension.getURL('html/main.html')}, function (tab) {
             });
+
+            closePopup();
         };
 
         $scope.activateCase = (simCase)=> {
             //update remote
             chrome.extension.sendRequest({action: "activateCase", caseStr: angular.toJson(simCase)}, (response) => {
-            })
+            });
+
+            closePopup();
         };
 
         $scope.deactivateCase = ()=> {
             //update remote
             chrome.extension.sendRequest({action: "deactivateCase"}, (response) => {
-            })
+            });
+
+            closePopup();
         };
     }]);

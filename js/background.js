@@ -128,19 +128,6 @@ let demoCases = [
     });
 })();
 
-function appendHeaders(requestHeaders, additionalHeaders) {
-    if (!additionalHeaders || additionalHeaders.length < 1) {
-        return;
-    }
-
-    //遍历自定义headers
-    let keys = Object.keys(additionalHeaders);
-    keys.forEach((key)=> {
-        //添加到真正的header
-        requestHeaders.push({name: key, value: additionalHeaders[key]});
-    })
-}
-
 function getAllCases(callback) {
     //https://developer.chrome.com/extensions/storage#property-sync
     chrome.storage.sync.get('allCases', (items) => {
@@ -196,7 +183,7 @@ function modifyHeaders(details) {
     }
 
     //增加到请求的 header
-    appendHeaders(details.requestHeaders, activeCase.parsedHeaders);
+    $.extend(details.requestHeaders, activeCase.parsedHeaders);
 }
 
 function modifyUserAgent(details) {

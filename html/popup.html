@@ -43,6 +43,10 @@
         <div style="font-size: 1px;"> &nbsp; </div>
     </div>
 
+    <p class="text-xs-center text-muted"
+       ng-if="!cases||cases.length<1">
+        <small>暂无可用模拟用例</small>
+    </p>
     <div class="case-list">
         <div class="sim-case text-breakall"
              ng-repeat="simCase in cases"
@@ -53,7 +57,7 @@
     </div>
 </div>
 
-<div tabindex="1" >
+<div tabindex="1">
 </div>
 </body>
 </html>

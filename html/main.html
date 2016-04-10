@@ -228,7 +228,9 @@
 
             <!--用例列表-->
             <div ng-if="!cases||cases.length<1">
-                <p class="text-sm-center"> 目前没有用例 </p>
+                <p class="text-xs-center text-muted">
+                    暂无可用模拟用例
+                </p>
             </div>
             <div class="simCase"
                  ng-repeat="onecase in cases"

@@ -233,14 +233,16 @@
             <div class="simCase"
                  ng-repeat="onecase in cases"
                  ng-click="changeShowCase(onecase)">
-                <div class=" text-breakall">
+                <div class="text-breakall">
                     <div class="btn-group btn-group-sm pull-right" role="group" aria-label="Basic example">
                         <!--激活按钮-->
-                        <button class="btn btn-success-outline">
+                        <button class="btn btn-success-outline"
+                                ng-click="activateCase(onecase)">
                             <i class="fa fa-play"></i>
                         </button>
                         <!--删除按钮-->
-                        <button class="btn btn-danger-outline">
+                        <button class="btn btn-danger-outline"
+                                ng-click="removeCase(onecase.caseId)">
                             <i class="fa fa-times"></i>
                         </button>
                     </div>

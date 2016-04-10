@@ -2,8 +2,8 @@
   "manifest_version": 2,
   "name": "Sailfish Requester 旗鱼 请求管理器",
   "short_name": "Sailfish",
-  "version": "1.1.1",
-  "description": "One-stop solution for customizing requests with headers, user agents, url parameters and etc.",
+  "version": "1.2.0",
+  "description": "One-stop solution for customizing requests with modifying headers, user agents, url parameters and etc.",
   "content_security_policy": "script-src 'self' 'unsafe-eval' https://ssl.google-analytics.com; object-src 'self'",
   "icons": {
     "16": "img/logo.png",

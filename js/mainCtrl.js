@@ -32,6 +32,8 @@ angular.module('mainCtrl', [])
             //    }
             //];
 
+            $scope.extensionVersion = chrome.app.getDetails().version;  //chrome 扩展版本
+
             getHeaderDescriptors();
 
             getAllCases();

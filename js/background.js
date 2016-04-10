@@ -240,13 +240,13 @@ function modifyGetParams(details) {
 
     //组装新query string
     let newQueryString = pairs.reduce(
-        (result, pair)=>
-            result.concat(encodeURIComponent(pair.key), '=', encodeURIComponent(pair.value), '&')
+        (newQueryString, pair)=>
+            newQueryString.concat(encodeURIComponent(pair.key), '=', encodeURIComponent(pair.value), '&')
         , '?');
-    newQueryString = newQueryString.slice(0, newQueryString.length - 1);    //删除结尾多余的&
 
     //组装新URL
-    let newUrl = aNode.protocol.concat('//', aNode.host, aNode.pathname, newQueryString, aNode.hash);
+    aNode.search = newQueryString.slice(0, newQueryString.length - 1);   //删除结尾多余的'&'
+    let newUrl = aNode.href;
 
     //cleanup
     document.body.removeChild(aNode);

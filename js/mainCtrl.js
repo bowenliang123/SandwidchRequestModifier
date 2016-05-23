@@ -358,19 +358,19 @@ angular.module('mainCtrl', [])
                 return;
             }
 
-            let targetCase = $scope.cases.find((item)=>(item.caseId == simCaseId));
-            if (!targetCase) {
+            let targetIndex = $scope.cases.findIndex((item)=>(item.caseId == simCaseId));
+            if (targetIndex < 0) {
                 alert('未找到要保存的用例');
                 return;
             }
 
             //更新并持久化用例
-            targetCase = $scope.showCase;
+            $scope.cases[targetIndex] = $scope.showCase;
             $scope.persistAllCases($scope.cases);
 
             //若保存的当前用例为激活用例，重新激活一次
             if ($scope.activeCase && simCaseId == $scope.activeCase.caseId) {
-                $scope.activateCase(targetCase);
+                $scope.activateCase(targetIndex);
             }
 
             alert('保存成功');

@@ -15,48 +15,48 @@ let getYYYYMMDDHHMM = () => {
 // 复制必要的文件
 gulp.task('copyBower', ['clean'], ()=> {
     return gulp.src([
-            //angular
-            'bower_components/angular/angular.min.js',
+        //angular
+        'bower_components/angular/angular.min.js',
 
-            //bootstrap
-            'bower_components/bootstrap/dist/**/*',
+        //bootstrap
+        'bower_components/bootstrap/dist/**/*',
 
-            //font-awesome
-            'bower_components/font-awesome/css/**/*',
-            'bower_components/font-awesome/fonts/**/*',
+        //font-awesome
+        'bower_components/font-awesome/css/**/*',
+        'bower_components/font-awesome/fonts/**/*',
 
-            //jquery
-            'bower_components/jquery/dist/**/*',
+        //jquery
+        'bower_components/jquery/dist/**/*',
 
-            //ua-parser-js
-            'bower_components/ua-parser-js/dist/**/*',
+        //ua-parser-js
+        'bower_components/ua-parser-js/dist/**/*',
 
-            //jquery-elastic
-            'bower_components/jquery-elastic/jquery.elastic.source.js',
-        ], {'base': '.'})
+        //jquery-elastic
+        'bower_components/jquery-elastic/jquery.elastic.source.js',
+    ], {'base': '.'})
         .pipe(gulp.dest('dist/'));
 });
 
 // 复制必要的文件
 gulp.task('copyNpm', ['clean'], ()=> {
     return gulp.src([
-            //
-            //'node_modules//**/*',
+        //
+        //'node_modules//**/*',
 
-        ], {'base': '.'})
+    ], {'base': '.'})
         .pipe(gulp.dest('dist/'));
 });
 
 // 复制必要的文件
 gulp.task('copy', ['clean', 'copyBower'], ()=> {
     return gulp.src([
-            'manifest.json',
-            'html/*',
-            'js/**/*',
-            'css/*',
-            //'bower_components/**/',
-            'img/*'
-        ], {'base': '.'})
+        'manifest.json',
+        'html/*',
+        'js/**/*',
+        'css/*',
+        //'bower_components/**/',
+        'img/*'
+    ], {'base': '.'})
         .pipe(gulp.dest('dist/'));
 });
 
@@ -64,16 +64,16 @@ gulp.task('copy', ['clean', 'copyBower'], ()=> {
 // Clean
 gulp.task('clean', () => {
     return gulp.src([
-            'dist/',
-            'releases/'
-        ], {read: false})
+        'dist/',
+        'releases/'
+    ], {read: false})
         .pipe(clean());
 });
 
 // zip
 gulp.task('zip', ['build'], ()=> {
     return gulp.src('dist/**/*', {'base': '.'})
-        .pipe(zip('SailFishRequester-' + getYYYYMMDDHHMM() + '.zip'))
+        .pipe(zip('SailFishRequestModifier-' + getYYYYMMDDHHMM() + '.zip'))
         .pipe(gulp.dest('releases'));
 });
 

@@ -278,8 +278,8 @@ function parseActiveCase(simCaseStr) {
                         return headers;
                     }
 
-                    let key = decodeURIComponent(customHeaderLine.slice(0, index));
-                    let value = decodeURIComponent(customHeaderLine.slice(index + 1, customHeaderLine.length));
+                    let key = customHeaderLine.slice(0, index);
+                    let value = customHeaderLine.slice(index + 1, customHeaderLine.length);
 
                     headers[key] = value;
                     return headers;

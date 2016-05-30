@@ -48,7 +48,7 @@
                   ng-model="logText"
                   ng-change="updateLogText()"></textarea>
 
-
+    <p class="text-muted">字段分隔符为"{{MAIN_SEPERATOR}}",次要分隔符为"{{SUB_SEPERATOR}}"。</p>
     <!--解析后日志-->
     <div ng-repeat="logCase in logCases" id="logCase{{$index+1}}">
         <br>

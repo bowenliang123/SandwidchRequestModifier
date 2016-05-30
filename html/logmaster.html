@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="logmaster_app">
+<head>
+    <meta charset="UTF-8">
+    <title>日志大师</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.min.css">
+
+    <!--fontawesome css-->
+    <link rel="stylesheet" href="../bower_components/font-awesome/css/font-awesome.min.css">
+
+
+    <!-- jQuery first, then Bootstrap JS. -->
+    <script src="../bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+
+    <!-- angular v1 -->
+    <script src="../bower_components/angular/angular.min.js"></script>
+
+    <!--app-->
+    <script src="../js/logmaster_app.js"></script>
+    <script src="../js/logmasterCtrl.js"></script>
+</head>
+<body ng-controller="logmasterCtrl">
+<div class="container">
+    <div class="row">
+
+        <!--日志文本-->
+        <textarea class="form-control  text-breakall" id="logTextTextarea" rows="8"
+                  placeholder="日志文本"
+                  ng-model="logText"
+                  ng-change="updateLogText()"></textarea>
+
+        <!--是否排序-->
+        <button class="btn btn-primary"
+                ng-click="isSort=!isSort;updateLogText();">
+            是否排序: {{isSort}}
+        </button>
+        <!--解析后日志-->
+        <div ng-repeat="logCase in logCases">
+            <br>
+            <h3 scope="row">{{$index}}</h3>
+
+            <table class="table table-striped table-sm">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>字段名称</th>
+                    <th>值</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="param in logCase.params track by $index">
+                    <th scope="row">{{$index}}</th>
+                    <td>{{param.key}}</td>
+                    <td>{{param.value}}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

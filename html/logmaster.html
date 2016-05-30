@@ -30,10 +30,13 @@
 
     <!--导航栏-->
     <nav class="navbar navbar-light bg-faded m-y-1">
-        <!--是否排序-->
+
         <div class="nav navbar-nav">
-            <a class="nav-item nav-link active" href="#" ng-click="isSort=!isSort;updateLogText();">
-                是否排序: {{isSort}}</a>
+            <a class="navbar-brand " href="#">LogMaster 日志大师</a>
+
+            <!--是否排序-->
+            <a class="nav-item nav-link active text-primary" href="#" ng-click="isSort=!isSort;updateLogText();">
+                是否按字段名排序: {{isSort}}</a>
 
             <!--pagination 快速跳转-->
             <a ng-repeat="logCase in logCases"
@@ -41,7 +44,7 @@
         </div>
 
         <form class="form-inline pull-xs-right">
-            <input class="form-control" type="text" placeholder="Search" ng-model="queryText">
+            <input class="form-control" type="text" placeholder="搜索字段名" ng-model="queryText">
         </form>
     </nav>
 
@@ -64,7 +67,7 @@
             <thead>
             <tr>
                 <th class="col-sm-1">#</th>
-                <th class="col-sm-2">字段名称</th>
+                <th class="col-sm-2">字段名</th>
                 <th class="col-sm-9">值</th>
             </tr>
             </thead>

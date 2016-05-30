@@ -39,34 +39,40 @@
             <a ng-repeat="logCase in logCases"
                class="nav-item nav-link" href="#logCase{{$index+1}}">{{$index+1}}</a>
         </div>
+
+        <form class="form-inline pull-xs-right">
+            <input class="form-control" type="text" placeholder="Search" ng-model="queryText">
+        </form>
     </nav>
 
 
     <!--日志文本-->
-        <textarea class="form-control  text-breakall" id="logTextTextarea" rows="8"
+        <textarea class="form-control  text-breakall" id="logTextTextarea" rows="8" style="word-break: break-all"
                   placeholder="日志文本"
                   ng-model="logText"
                   ng-change="updateLogText()"></textarea>
 
     <p class="text-muted">字段分隔符为"{{MAIN_SEPERATOR}}",次要分隔符为"{{SUB_SEPERATOR}}"。</p>
     <!--解析后日志-->
-    <div ng-repeat="logCase in logCases" id="logCase{{$index+1}}">
-        <br>
-        <h3 scope="row">Case {{$index+1}}</h3>
+    <div ng-repeat="logCase in logCases" id="logCase{{$index+1}}" class="m-y-2">
+        <h2 class="m-y-1">
+            Case {{$index+1}}
+            <small class="text-muted"> {{logCase.params.length}}个字段</small>
+        </h2>
 
-        <table class="table table-striped table-sm">
+        <table class="table table-sm table-hover">
             <thead>
             <tr>
-                <th>#</th>
-                <th>字段名称</th>
-                <th>值</th>
+                <th class="col-sm-1">#</th>
+                <th class="col-sm-2">字段名称</th>
+                <th class="col-sm-9">值</th>
             </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="param in logCase.params track by $index">
-                <th>{{$index}}</th>
-                <td>{{param.key}}</td>
-                <td>{{param.value}}</td>
+            <tr ng-repeat="param in logCase.params |filter:queryText track by $index">
+                <th class="col-sm-1">{{$index}}</th>
+                <td class="col-sm-2">{{param.key}}</td>
+                <td class="col-sm-9">{{param.value}}</td>
             </tr>
             </tbody>
         </table>

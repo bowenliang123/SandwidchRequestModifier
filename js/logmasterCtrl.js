@@ -53,10 +53,10 @@ angular.module('logmasterCtrl', [])
             }
 
 
-            let linesArrs = breakLines(text);
+            let logCases = breakLines(text);
 
             let tempArr = []
-            linesArrs.forEach((logCase) => {
+            logCases.forEach((logCase) => {
                 tempArr.push(parseLogCase(logCase));
             });
             return tempArr;

@@ -349,23 +349,35 @@ angular.module('mainCtrl', [])
          * @param simCaseId
          */
         $scope.saveCase = (simCaseId)=> {
-            if (!simCaseId) {
-                alert('当前用例为空');
-                return;
-            }
-
             if (!$scope.cases) {
                 return;
             }
 
-            let targetIndex = $scope.cases.findIndex((item)=>(item.caseId == simCaseId));
-            if (targetIndex < 0) {
-                alert('未找到要保存的用例');
+            if (!$scope.showCase.name) {
+                alert('用例名称不得为空!');
                 return;
             }
 
-            //更新并持久化用例
-            $scope.cases[targetIndex] = $scope.showCase;
+
+            if (!simCaseId) {
+                let reply = confirm('当前用例为空,是否保存为新的用例?');
+                if (!reply) {
+                    return;
+                } else {
+                    simCaseId = new Date().getTime()
+                    $scope.showCase.caseId = simCaseId;
+                }
+            }
+
+            //更新用例库
+            let targetIndex = $scope.cases.findIndex((item)=>(item.caseId == simCaseId));
+            if (targetIndex >= 0) {
+                $scope.cases[targetIndex] = $scope.showCase;
+            } else {
+                $scope.cases.push($scope.showCase);
+            }
+
+            //持久化用例
             $scope.persistAllCases($scope.cases);
 
             //若保存的当前用例为激活用例，重新激活一次

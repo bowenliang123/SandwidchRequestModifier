@@ -43,8 +43,8 @@
                class="nav-item nav-link" href="#logCase{{$index+1}}">{{$index+1}}</a>
         </div>
 
-        <form class="form-inline pull-xs-right">
-            <input class="form-control" type="text" placeholder="搜索字段名" ng-model="queryText">
+        <form class="form-inline pull-lg-right">
+            <input class="form-control" type="text" placeholder="搜索" ng-model="queryText">
         </form>
     </nav>
 
@@ -53,24 +53,22 @@
         <textarea class="form-control  text-breakall" id="logTextTextarea" rows="8" style="word-break: break-all"
                   placeholder="日志文本"
                   ng-model="logText"
-                  ng-change="updateLogText()"></textarea>
+                  ng-change="updateLogText()"
+        ></textarea>
 
-    <p class="text-muted">字段分隔符为"{{MAIN_SEPERATOR}}",次要分隔符为"{{SUB_SEPERATOR}}"。</p>
+    <div class="row">
+        <!--分隔符提示-->
+        <p class="text-muted">字段分隔符为 <span class="text-danger font-weight-bold">{{MAIN_SEPERATOR}}</span> ,
+            次要分隔符为 <span class="text-danger font-weight-bold">{{SUB_SEPERATOR}}</span> 。</p>
+    </div>
     <!--解析后日志-->
     <div ng-repeat="logCase in logCases" id="logCase{{$index+1}}" class="m-y-2">
-        <h2 class="m-y-1">
+        <h5 class="m-y-1">
             Case {{$index+1}}
             <small class="text-muted"> {{logCase.params.length}}个字段</small>
-        </h2>
+        </h5>
 
         <table class="table table-sm table-hover">
-            <thead>
-            <tr>
-                <th class="col-sm-1">#</th>
-                <th class="col-sm-2">字段名</th>
-                <th class="col-sm-9">值</th>
-            </tr>
-            </thead>
             <tbody>
             <tr ng-repeat="param in logCase.params |filter:queryText track by $index">
                 <th class="col-sm-1">{{$index}}</th>

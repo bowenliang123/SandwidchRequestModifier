@@ -15,59 +15,54 @@ angular.module('logmasterCtrl', [])
 
         //私有函数
 
-        function breakLines(text) {
+        let breakLines = (text)=> {
             if (!text) {
                 return [];
             }
+            
             let lines = text.split('\n');
-            let tempArr = []
+            let tempArr = [];
             lines.forEach((line)=> {
                 tempArr.push({
                     lineArr: line.split($scope.MAIN_SEPERATOR)
                 })
             });
             return tempArr;
-        }
+        };
 
-        function parseLogCase(logCase) {
+        let parseLogCase = (logCase)=> {
             //是否排序
             if ($scope.isSort) {
                 logCase.lineArr.sort()
             }
 
             let newArr = [];
-            logCase.lineArr.forEach((line)=> {
+            logCase.lineArr.forEach((line)=> { 
                 let index = line.indexOf($scope.SUB_SEPERATOR);
                 newArr.push({
-                    key: line.slice(0, index),
-                    value: line.slice(index + 1, line.length)
+                    key: (index < 0) ? line : line.slice(0, index),
+                    value: (index < 0) ? '' : line.slice(index + 1, line.length)
                 });
             });
             return {params: newArr};
+        };
 
-        }
-
-        function parseLogText(text) {
+        let parseLogText = (text)=> {
             if (!text) {
                 return [];
             }
-
-
+            
             let logCases = breakLines(text);
-
-            let tempArr = []
+            let tempArr = [];
             logCases.forEach((logCase) => {
                 tempArr.push(parseLogCase(logCase));
             });
             return tempArr;
+        };
 
-        }
-
-        function init() {
+        let init = () => {
             $scope.isSort = true;
-            $scope.updateLogText();
-
-        }
+        };
 
         init();
 

@@ -40,6 +40,7 @@ angular.module('logmasterCtrl', [])
             logCase.lineArr.forEach((line)=> { 
                 let index = line.indexOf($scope.SUB_SEPERATOR);
                 newArr.push({
+                    rawLine: line,
                     key: (index < 0) ? line : line.slice(0, index),
                     value: (index < 0) ? '' : line.slice(index + 1, line.length)
                 });
@@ -62,6 +63,7 @@ angular.module('logmasterCtrl', [])
 
         let init = () => {
             $scope.isSort = true;
+            $scope.queryText = '';
         };
 
         init();

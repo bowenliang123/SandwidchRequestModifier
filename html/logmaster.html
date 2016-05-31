@@ -44,7 +44,8 @@
         </div>
 
         <form class="form-inline pull-lg-right">
-            <input class="form-control" type="text" placeholder="搜索" ng-model="queryText">
+            <input class="form-control" type="text" placeholder="搜索关键字" ng-model="queryTextInput">
+            <button class="btn btn-success" ng-click="queryText=queryTextInput">搜索</button>
         </form>
     </nav>
 
@@ -70,7 +71,8 @@
 
         <table class="table table-sm table-hover">
             <tbody>
-            <tr ng-repeat="param in logCase.params |filter:queryText track by $index">
+            <tr ng-repeat="param in logCase.params track by $index"
+                ng-show="([param]|filter:queryText).length>0">
                 <th class="col-sm-1">{{$index}}</th>
                 <td class="col-sm-2">{{param.key}}</td>
                 <td class="col-sm-9">{{param.value}}</td>

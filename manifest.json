@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "Sailfish Request Modifier 旗鱼 请求修改器",
   "short_name": "Sailfish",
-  "version": "1.3.2",
+  "version": "1.3.3",
   "description": "One-stop solution for customizing requests with modifying headers, user agents, url parameters and etc.",
   "content_security_policy": "script-src 'self' 'unsafe-eval' https://ssl.google-analytics.com; object-src 'self'",
   "icons": {

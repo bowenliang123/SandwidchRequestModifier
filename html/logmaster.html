@@ -65,20 +65,17 @@
     <!--解析后日志-->
     <div ng-repeat="logCase in logCases" id="logCase{{$index+1}}" class="m-y-2">
         <h5 class="m-y-1">
-            Case {{$index+1}}
+            日志行 #{{$index+1}}
             <small class="text-muted"> {{logCase.params.length}}个字段</small>
         </h5>
 
-        <table class="table table-sm table-hover">
-            <tbody>
-            <tr ng-repeat="param in logCase.params track by $index"
-                ng-show="([param]|filter:queryText).length>0">
-                <th class="col-sm-1">{{$index}}</th>
-                <td class="col-sm-2">{{param.key}}</td>
-                <td class="col-sm-9">{{param.value}}</td>
-            </tr>
-            </tbody>
-        </table>
+        <div ng-repeat="param in logCase.params track by $index"
+             ng-show="([param]|filter:queryText).length>0"
+             class="row">
+            <div class="col-sm-1 font-weight-bold">{{$index}}</div>
+            <div class="col-sm-2">{{param.key}}</div>
+            <div class="col-sm-9">{{param.value}}</div>
+        </div>
     </div>
 
 

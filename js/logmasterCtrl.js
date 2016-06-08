@@ -9,7 +9,9 @@ angular.module('logmasterCtrl', [])
 
         //响应
         $scope.updateLogText = ()=> {
-            $scope.logCases = parseLogText($scope.logText);
+            // $scope.logCases = parseLogText($scope.logText);
+            $scope.logCases = [];
+            parseLogText($scope.logText);
         };
 
 
@@ -19,7 +21,7 @@ angular.module('logmasterCtrl', [])
             if (!text) {
                 return [];
             }
-            
+
             let lines = text.split('\n');
             let tempArr = [];
             lines.forEach((line)=> {
@@ -30,35 +32,39 @@ angular.module('logmasterCtrl', [])
             return tempArr;
         };
 
-        let parseLogCase = (logCase)=> {
-            //是否排序
-            if ($scope.isSort) {
-                logCase.lineArr.sort()
-            }
+        let parseLogCase = (logCase, index)=> {
+            return new Promise((resolve, reject)=> {
+                //是否排序
+                if ($scope.isSort) {
+                    logCase.lineArr.sort()
+                }
 
-            let newArr = [];
-            logCase.lineArr.forEach((line)=> { 
-                let index = line.indexOf($scope.SUB_SEPERATOR);
-                newArr.push({
-                    rawLine: line,
-                    key: (index < 0) ? line : line.slice(0, index),
-                    value: (index < 0) ? '' : line.slice(index + 1, line.length)
+                let newArr = [];
+                logCase.lineArr.forEach((line)=> {
+                    let index = line.indexOf($scope.SUB_SEPERATOR);
+                    newArr.push({
+                        rawLine: line,
+                        key: (index < 0) ? line : line.slice(0, index),
+                        value: (index < 0) ? '' : line.slice(index + 1, line.length)
+                    });
                 });
-            });
-            return {params: newArr};
+                $scope.logCases[index] = {params: newArr};
+
+                resolve();
+            })
         };
 
         let parseLogText = (text)=> {
             if (!text) {
-                return [];
+                $scope.logCases = [];
             }
-            
+
             let logCases = breakLines(text);
-            let tempArr = [];
-            logCases.forEach((logCase) => {
-                tempArr.push(parseLogCase(logCase));
-            });
-            return tempArr;
+            let haha = [];
+            for (let i = 0; i < logCases.length; i++) {
+                haha.push(parseLogCase(logCases[i], i));
+            }
+            Promise.race(haha);
         };
 
         let init = () => {

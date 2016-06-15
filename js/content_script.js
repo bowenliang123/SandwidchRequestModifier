@@ -30,9 +30,12 @@ function modifyUserAgent() {
         return;
     }
 
+    //获取插件manifest文件信息
+    let manifest = chrome.runtime.getManifest();
+
     //refer:
     //http://stackoverflow.com/questions/23202136/changing-navigator-useragent-using-chrome-extension
-    var actualCode = '(' + `function () {
+    let actualCode = '(' + `function () {
             'use strict';
             var navigator = window.navigator;
             var modifiedNavigator;
@@ -54,7 +57,7 @@ function modifyUserAgent() {
             // Pretend to be custom use agent
             Object.defineProperties(modifiedNavigator, {
                 userAgent: {
-                    value: "${activeCase.ua}",
+                    value: "${activeCase.ua} ${manifest.short_name}/${manifest.version}",   //UA信息加上插件名称
                     configurable: false,
                     enumerable: true,
                     writable: false

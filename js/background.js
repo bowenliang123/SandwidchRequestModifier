@@ -10,6 +10,8 @@ let activeCase;
 
 let modifiedUrlCount = 0;
 
+const manifest = chrome.runtime.getManifest();  //插件manifest信息
+
 let demoCases = [
     {
         caseId: 0,
@@ -163,7 +165,7 @@ function fetchActiveCase(callback) {
             chrome.browserAction.setBadgeText({text: activeCase.name});
 
             //清除 browser action title
-            chrome.browserAction.setTitle({title: `Name:  ${activeCase.name}\n\nUser Agent:\n${activeCase.ua}\n\nHeaders:\n${activeCase.headers}`});
+            chrome.browserAction.setTitle({title: `Name:  ${activeCase.name}\n\nUser Agent:\n${decorateUa(activeCase.ua)}\n\nHeaders:\n${activeCase.headers}`});
 
             callback && callback(items['activeCase']);
         } else {
@@ -184,6 +186,10 @@ function saveActiveCase(simCase) {
     });
 }
 
+/**
+ * 修改headers
+ * @param details
+ */
 function modifyHeaders(details) {
     if (!activeCase || !activeCase.parsedHeaders || activeCase.parsedHeaders == {}) {
         return;
@@ -197,10 +203,16 @@ function modifyHeaders(details) {
     })
 }
 
+/**
+ * 修改ua
+ * @param details
+ */
 function modifyUserAgent(details) {
     if (!activeCase || !activeCase.ua) {
         return;
     }
+
+    let decoratedUserAgentStr = decorateUa(activeCase.ua);
 
     for (let i = 0; i < details.requestHeaders.length; i++) {
         let requestHeader = details.requestHeaders[i];
@@ -208,7 +220,8 @@ function modifyUserAgent(details) {
 
         //修改user agent
         if (headerName && headerName.startsWith('user') && headerName.indexOf('agent') > 0) {
-            requestHeader.value = activeCase.ua;
+
+            requestHeader.value = decoratedUserAgentStr;
             break;
         }
     }
@@ -345,4 +358,8 @@ function parseActiveCase(simCaseStr) {
 
     return simCase;
 
+}
+
+function decorateUa(ua) {
+    return ua + ' ${manifest.short_name}/${manifest.version}';
 }

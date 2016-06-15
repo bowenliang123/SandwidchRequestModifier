@@ -164,8 +164,27 @@ function fetchActiveCase(callback) {
             //设置 badge 文本
             chrome.browserAction.setBadgeText({text: activeCase.name});
 
-            //清除 browser action title
-            chrome.browserAction.setTitle({title: `Name:  ${activeCase.name}\n\nUser Agent:\n${decorateUa(activeCase.ua)}\n\nHeaders:\n${activeCase.headers}`});
+            //组装 browser action title
+            let title =
+                `Case: ${activeCase.name}`;
+
+            if (activeCase.ua) {
+                title += `\n\nUser Agent:\n${decorateUa(activeCase.ua)}`;
+            }
+
+            if (activeCase.headers) {
+                title += `\n\nHeaders:\n${activeCase.headers}`;
+            }
+
+            if (activeCase.params) {
+                title += `\n\nParams:\n${activeCase.params}`;
+            }
+
+            //设置 browser action title
+            chrome.browserAction.setTitle(
+                {
+                    title: title
+                });
 
             callback && callback(items['activeCase']);
         } else {
@@ -361,5 +380,5 @@ function parseActiveCase(simCaseStr) {
 }
 
 function decorateUa(ua) {
-    return ua + ' ${manifest.short_name}/${manifest.version}';
+    return `${ua} ${manifest.short_name}/${manifest.version}`;
 }

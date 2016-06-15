@@ -8,6 +8,8 @@ console.log('background.js');
 
 let activeCase;
 
+let modifiedUrlCount = 0;
+
 let demoCases = [
     {
         caseId: 0,
@@ -36,37 +38,49 @@ let demoCases = [
 
     //监听所有请求，header发出前对请求进行修改
     //https://developer.chrome.com/extensions/webRequest#event-onBeforeRequest
-    chrome.webRequest.onBeforeRequest.addListener(
-        (details) => {
-            if (isIgnoredRequest(details)) {
-                return;
-            }
+    const onBeforeRequestHandler = (details) => {
+        if (isIgnoredRequest(details)) {
+            return;
+        }
 
-            //应用GET参数修改规则
-            let newUrl = modifyGetParams(details);
-            if (newUrl != details.url) {
-                return {redirectUrl: newUrl};
-            }
-        },
+        //应用GET参数修改规则
+        let newUrl = modifyGetParams(details);
+        if (newUrl && newUrl != details.url) {
+
+            modifiedUrlCount++;
+            // console.log(`[${modifiedUrlCount}] mofify url:  ${details.url} => ${newUrl}`);  //log
+
+            console.group(`[${modifiedUrlCount}] modify url: (${new Date()})`);
+            console.log('from:', details.url);
+            console.log('to:', newUrl);
+            console.groupEnd();
+
+            return {redirectUrl: newUrl};
+        }
+    };
+    chrome.webRequest.onBeforeRequest.removeListener(onBeforeRequestHandler);
+    chrome.webRequest.onBeforeRequest.addListener(
+        onBeforeRequestHandler,
         {urls: ["<all_urls>"]},
         ["blocking"]);
 
 
     //监听所有请求，header发出前对请求进行修改
     //https://developer.chrome.com/extensions/webRequest#event-onBeforeSendHeaders
-    chrome.webRequest.onBeforeSendHeaders.addListener(
-        (details) => {
-            //console.log(details);
+    const onBeforeSendHeadersHandler = (details) => {
+        //console.log(details);
 
-            if (isIgnoredRequest(details)) {
-                return;
-            }
+        if (isIgnoredRequest(details)) {
+            return;
+        }
 
-            modifyHeaders(details);
-            modifyUserAgent(details);
+        modifyHeaders(details);
+        modifyUserAgent(details);
 
-            return {requestHeaders: details.requestHeaders};
-        },
+        return {requestHeaders: details.requestHeaders};
+    };
+    chrome.webRequest.onBeforeSendHeaders.removeListener(onBeforeSendHeadersHandler);
+    chrome.webRequest.onBeforeSendHeaders.addListener(onBeforeSendHeadersHandler,
         {urls: ["<all_urls>"]},
         ["blocking", "requestHeaders"]);
 
@@ -107,17 +121,18 @@ let demoCases = [
                 sendResponse({}); // snub them.
         });
 
-//监听chrome storage 变化
-    chrome.storage.onChanged.addListener((changes, namespace) => {
-        for (let key in changes) {
-            if (key == 'activeCase') {
-                fetchActiveCase();
-            }
+    //监听chrome storage 变化
+    chrome.storage.onChanged.addListener(
+        (changes, namespace) => {
+            for (let key in changes) {
+                if (key == 'activeCase') {
+                    fetchActiveCase();
+                }
 
-            else if (key == 'allCases') {
+                else if (key == 'allCases') {
+                }
             }
-        }
-    });
+        });
 })();
 
 function getAllCases(callback) {

@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
-  "name": "Sandwich Requester 三文治 请求器",
-  "short_name": "Sandwich",
-  "version": "2.0.0",
+  "name": "Sandwidch Requester 三文治 请求器",
+  "short_name": "Sandwidch",
+  "version": "2.0.1",
   "description": "One-stop solution for customizing requests with modifying headers, user agents, url parameters and etc.",
   "content_security_policy": "script-src 'self' 'unsafe-eval' https://ssl.google-analytics.com; object-src 'self'",
   "icons": {
@@ -20,7 +20,7 @@
     "webRequestBlocking"
   ],
   "omnibox": {
-    "keyword": "Sandwich"
+    "keyword": "Sandwidch"
   },
   "options_page": "html/main.html",
   "devtools_page": "html/devtools.html",

@@ -95,7 +95,7 @@ angular.module('mainCtrl', [])
             downloadLink.href = 'data:text/plain,' + content;
 
             //文件名
-            downloadLink.download = 'Sandwich-export-' + new Date().getTime() + '.json';
+            downloadLink.download = 'Sandwidch-export-' + new Date().getTime() + '.json';
 
             //加入到文档中
             document.body.appendChild(downloadLink);

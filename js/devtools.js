@@ -4,7 +4,7 @@
 'use strict';
 
 chrome.devtools.panels.create(
-    'Sailfish Requester',
+    'Sandwich Requester',
     null, // No icon path
     'html/main.html',
     null // no callback needed

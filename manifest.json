@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
-  "name": "Sailfish Request Modifier 旗鱼 请求修改器",
-  "short_name": "Sailfish",
+  "name": "Sandwich Requester 三文治 请求器",
+  "short_name": "Sandwich",
   "version": "1.4.3",
   "description": "One-stop solution for customizing requests with modifying headers, user agents, url parameters and etc.",
   "content_security_policy": "script-src 'self' 'unsafe-eval' https://ssl.google-analytics.com; object-src 'self'",
@@ -20,7 +20,7 @@
     "webRequestBlocking"
   ],
   "omnibox": {
-    "keyword": "Sailfish"
+    "keyword": "Sandwich"
   },
   "options_page": "html/main.html",
   "devtools_page": "html/devtools.html",

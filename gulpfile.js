@@ -73,7 +73,7 @@ gulp.task('clean', () => {
 // zip
 gulp.task('zip', ['build'], ()=> {
     return gulp.src('dist/**/*', {'base': '.'})
-        .pipe(zip('SailFishRequestModifier-' + getYYYYMMDDHHMM() + '.zip'))
+        .pipe(zip('SandwichRequester-' + getYYYYMMDDHHMM() + '.zip'))
         .pipe(gulp.dest('releases'));
 });
 

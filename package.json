@@ -1,5 +1,5 @@
 {
-  "name": "sailfish_requester",
+  "name": "Sandwidch Requester 三文治请求器",
   "version": "1.0.0",
   "description": "a chrome extension for modifying headers, parameters, user agents and etc.",
   "main": "index.js",
@@ -8,17 +8,17 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/bowenliang123/SailfishRequester.git"
+    "url": "git+https://github.com/bowenliang123/SandwichRequester.git"
   },
   "keywords": [
-    "sailfish",
+    "Sandwidch",
     "requester",
     "chrome",
     "extension"
   ],
   "author": "Bowen Liang",
   "license": "ISC",
-  "homepage": "https://github.com/bowenliang123/SailfishRequester#readme",
+  "homepage": "https://github.com/bowenliang123/Sandwich Requester#readme",
   "devDependencies": {
     "gulp": "^3.9.1",
     "gulp-clean": "^0.3.2",

@@ -160,6 +160,11 @@ function fetchActiveCase(callback) {
     chrome.storage.sync.get('activeCase', (items) => {
         activeCase = items['activeCase'];
 
+        //解析activeCase字段
+
+        // - targetDomains
+        activeCase.targetDomainKeywordsArr = activeCase.targetDomains.replace(/ /g, '').split(',');
+
         if (activeCase) {
             //设置 badge 文本
             chrome.browserAction.setBadgeText({text: activeCase.name});
@@ -301,11 +306,54 @@ function modifyGetParams(details) {
     return newUrl;
 }
 
+/**
+ * 从URL获取域名
+ * @param url
+ * @returns {string|ArrayBuffer|Blob}
+ */
+function getDomain(url) {
+    let tmp = url.slice(url.indexOf('//') + 2);
+    return tmp.slice(0, tmp.indexOf('/'));
+}
+
+
+/**
+ * 判断是否需要忽略的请求
+ * @param details
+ * @returns {boolean}
+ */
 function isIgnoredRequest(details) {
     let url = details.url;
 
+
     //只对http和https协议修改请求
-    return !(url.startsWith('http://') || url.startsWith('https://'));
+    if (!(url.startsWith('http://') || url.startsWith('https://'))) {
+        return false;
+    }
+
+    if (!activeCase) {
+        return false;
+    }
+
+    if (!activeCase.targetDomains || activeCase.targetDomains == '') {
+        return true;
+    }
+
+    // 判断是否在作用的域名范围内
+    let domain = getDomain(url);
+    console.log(domain);
+    let isHitTargetDomains = false;
+    let domainArr = activeCase.targetDomainKeywordsArr;
+    for (let i = 0; i < domainArr.length; i++) {
+        //关键字匹配
+        if (domain.indexOf(domainArr[i]) >= 0) {
+            //命中指定域名关键字
+            isHitTargetDomains = true;
+            break;
+        }
+    }
+
+    return !isHitTargetDomains; //返回
 }
 
 /**

@@ -158,6 +158,26 @@
                 </div>
             </fieldset>
 
+
+            <!--target domains-->
+            <!--name-->
+            <div class="form-group row">
+                <h6 for="targetDomainsInput" class="col-sm-2 form-control-label">Domain Keywords</h6>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="targetDomainsInput" placeholder="*"
+                           ng-model="showCase.targetDomains">
+
+                    <small class="text-muted">
+                        测试例的作用域名关键字，以小逗号分隔通配符格式域名,例如 "abc.com,hello.world.org" 等
+                        <span class="pull-right"
+                              ng-click="showCase.targetDomains=''">
+                               <i class="fa fa-times"></i> Clear
+                         </span>
+                    </small>
+                </div>
+            </div>
+
+
             <hr>
 
             <!--header 信息-->
@@ -275,8 +295,8 @@
                         </button>
                     </small>
                 </h4>
-            <textarea class="form-control text-breakall" rows="30"
-                      ng-model="headerDescriptors"></textarea>
+                <textarea class="form-control text-breakall" rows="30"
+                          ng-model="headerDescriptors"></textarea>
             </div>
         </div>
     </div>

@@ -341,7 +341,6 @@ function isIgnoredRequest(details) {
 
     // 判断是否在作用的域名范围内
     let domain = getDomain(url);
-    console.log(domain);
     let isHitTargetDomains = false;
     let domainArr = activeCase.targetDomainKeywordsArr;
     for (let i = 0; i < domainArr.length; i++) {

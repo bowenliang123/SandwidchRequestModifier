@@ -160,12 +160,19 @@ function fetchActiveCase(callback) {
     chrome.storage.sync.get('activeCase', (items) => {
         activeCase = items['activeCase'];
 
-        //解析activeCase字段
-
-        // - targetDomains
-        activeCase.targetDomainKeywordsArr = activeCase.targetDomains.replace(/ /g, '').split(',');
 
         if (activeCase) {
+
+            //解析activeCase字段
+
+            // - targetDomains
+            if (activeCase.targetDomains && activeCase.targetDomains.trim() != '') {
+                activeCase.targetDomainKeywordsArr = activeCase.targetDomains.replace(/ /g, '').split(',');
+            } else {
+                activeCase.targetDomainKeywordsArr = [];
+            }
+
+
             //设置 badge 文本
             chrome.browserAction.setBadgeText({text: activeCase.name});
 
@@ -336,7 +343,7 @@ function isIgnoredRequest(details) {
     }
 
     if (!activeCase.targetDomains || activeCase.targetDomains == '') {
-        return true;
+        return false;
     }
 
     // 判断是否在作用的域名范围内
@@ -411,10 +418,13 @@ function parseActiveCase(simCaseStr) {
         return;
     }
 
+
+
     //UA
     if (simCase.ua == '') {
         simCase.ua = undefined;
     }
+
 
     //解析 headers
     parseHeaders(simCase);

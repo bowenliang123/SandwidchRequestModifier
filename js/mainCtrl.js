@@ -296,6 +296,7 @@ angular.module('mainCtrl', [])
          * @param simCase
          */
         $scope.activateCase = (simCase) => {
+
             //update local
             $scope.activeCase = simCase;
 
@@ -382,7 +383,7 @@ angular.module('mainCtrl', [])
 
             //若保存的当前用例为激活用例，重新激活一次
             if ($scope.activeCase && simCaseId == $scope.activeCase.caseId) {
-                $scope.activateCase(targetIndex);
+                $scope.activateCase($scope.cases[targetIndex]);
             }
 
             alert('保存成功');

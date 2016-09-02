@@ -1,9 +1,13 @@
 'use strict';
 
 // Load plugins
-const gulp = require('gulp'),
-    clean = require('gulp-clean'),
-    zip = require('gulp-zip');
+const gulp = require('gulp');
+const clean = require('gulp-clean');
+const zip = require('gulp-zip');
+const babel = require("gulp-babel");
+const sourcemaps = require('gulp-sourcemaps');
+const uglify = require('gulp-uglify');
+
 
 let getYYYYMMDDHHMM = () => {
     let toXX = (input) => ((input < 10) ? ('0' + input) : input);
@@ -52,8 +56,8 @@ gulp.task('copy', ['clean', 'copyBower'], ()=> {
     return gulp.src([
         'manifest.json',
         'html/*',
-        'js/**/*',
         'css/*',
+        // 'js/**/*',
         //'bower_components/**/',
         'img/*'
     ], {'base': '.'})
@@ -77,9 +81,19 @@ gulp.task('zip', ['build'], ()=> {
         .pipe(gulp.dest('releases'));
 });
 
+// babeljs
+gulp.task('babeljs', ['clean', 'copy'], ()=> {
+    return gulp.src("js/**/*.js")
+        .pipe(sourcemaps.init())
+        .pipe(babel())
+        .pipe(uglify())
+        .pipe(sourcemaps.write('.'))
+        .pipe(gulp.dest("dist/js"));
+});
+
 
 // Build
-gulp.task('build', ['clean', 'copy']);
+gulp.task('build', ['clean', 'copy', 'babeljs']);
 
 // Default
 gulp.task('default', ['watch']);

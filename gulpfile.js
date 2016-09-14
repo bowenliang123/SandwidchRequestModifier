@@ -91,7 +91,6 @@ gulp.task('babeljs', ['clean', 'copy'], ()=> {
         .pipe(gulp.dest("dist/js"));
 });
 
-
 // Build
 gulp.task('build', ['clean', 'copy', 'babeljs']);
 

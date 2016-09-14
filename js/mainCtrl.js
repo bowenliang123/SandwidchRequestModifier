@@ -88,6 +88,14 @@ angular.module('mainCtrl', [])
          * @param base64img
          */
         function invokeDownload(content) {
+
+            let getYYYYMMDDHHMM = () => {
+                let toXX = (input) => ((input < 10) ? ('0' + input) : input);
+
+                let date = new Date();
+                return `${date.getFullYear()}${toXX(date.getMonth() + 1)}${toXX(date.getDate())}-${toXX(date.getHours())}${toXX(date.getMinutes())}`;
+            };
+
             //初始化链接
             let downloadLink = document.createElement("a");
 
@@ -95,7 +103,7 @@ angular.module('mainCtrl', [])
             downloadLink.href = 'data:text/plain,' + content;
 
             //文件名
-            downloadLink.download = 'Sandwidch-export-' + new Date().getTime() + '.json';
+            downloadLink.download = 'Sandwidch-export-' + getYYYYMMDDHHMM() + '.json';
 
             //加入到文档中
             document.body.appendChild(downloadLink);

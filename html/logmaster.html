@@ -51,11 +51,11 @@
 
 
     <!--日志文本-->
-        <textarea class="form-control  text-breakall" id="logTextTextarea" rows="8" style="word-break: break-all"
-                  placeholder="日志文本"
-                  ng-model="logText"
-                  ng-change="updateLogText()"
-        ></textarea>
+    <textarea class="form-control  text-breakall" id="logTextTextarea" rows="8" style="word-break: break-all"
+              placeholder="日志文本"
+              ng-model="logText"
+              ng-change="updateLogText()"
+    ></textarea>
 
     <div class="row">
         <!--分隔符提示-->
@@ -72,9 +72,9 @@
         <div ng-repeat="param in logCase.params track by $index"
              ng-show="([param]|filter:queryText).length>0"
              class="row">
-            <div class="col-sm-1 font-weight-bold">{{$index}}</div>
-            <div class="col-sm-2">{{param.key}}</div>
-            <div class="col-sm-9">{{param.value}}</div>
+            <div class="col-xs-1 text-muted">{{$index}}</div>
+            <div class="col-xs-4 font-weight-bold text-primary">{{param.key}}</div>
+            <div class="col-xs-7 font-weight-bold">{{param.value}}</div>
         </div>
     </div>
 

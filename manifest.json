@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "Sandwidch Request Modifier 三文治请求修改器",
   "short_name": "Sandwidch",
-  "version": "2.2.2",
+  "version": "2.2.3",
   "description": "A super handy chrome extension for modifying headers, URL parameters, user agents and etc., with cases and domain keywords support.",
   "content_security_policy": "script-src 'self' 'unsafe-eval' https://ssl.google-analytics.com; object-src 'self'",
   "icons": {

@@ -4,7 +4,7 @@
 'use strict';
 
 chrome.devtools.panels.create(
-    'Sandwidch Requester',
+    'Sandwidch Request Modifier',
     null, // No icon path
     'html/main.html',
     null // no callback needed

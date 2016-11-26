@@ -1,14 +1,14 @@
 {
   "name": "SandwidchRequestModifier",
   "version": "1.0.0",
-  "description": "a chrome extension for modifying headers, parameters, user agents and etc.",
+  "description": "A super handy chrome extension for modifying headers, URL parameters, user agents and etc., with case management and domain keywords support.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/bowenliang123/SandwidchRequester.git"
+    "url": "git+https://github.com/bowenliang123/SandwidchRequestModifier.git"
   },
   "keywords": [
     "Sandwidch",

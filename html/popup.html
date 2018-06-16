@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html ng-app="popupCtrl">
+<html ng-app="popupApp">
 <head>
     <meta charset="UTF-8">
-    <title>Sandwidch Request Modifier Popup</title>
+    <title> {{ 'POPUP.TITLE' | translate }}</title>
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.min.css">
@@ -20,29 +20,36 @@
     <!-- angular v1 -->
     <script src="../bower_components/angular/angular.min.js"></script>
 
+    <!-- angular translate -->
+    <script src="../bower_components/angular-translate/angular-translate.min.js"></script>
+    <script src="../bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.min.js"></script>
+    <script src="../bower_components/angular-cookies/angular-cookies.min.js"></script>
+    <script src="../bower_components/angular-translate-storage-cookie/angular-translate-storage-cookie.min.js"></script>
+    <script src="../bower_components/angular-translate-storage-local/angular-translate-storage-local.min.js"></script>
+
     <!--angular app-->
     <script src="../js/popupCtrl.js"></script>
 </head>
-<body ng-controller="popupCtrl">
+<body ng-controller="popupCtrl" translate-namespace="POPUP" >
 
 <div style="width: 200px">
 
     <div>
-        <a class="btn btn-block btn-sm btn-info-outline" href="logmaster.html" target="_blank">
-            Goto 日志大师
+        <a class="btn btn-block btn-sm btn-info-outline" href="#" ng-click="createNewTabToLOG()" target="_blank">
+            {{ translateNamespace + '.MASTER_LOG_LINK' | translate }}
         </a>
     </div>
     <div class="">
         <button class="btn btn-sm btn-danger-outline btnDeactivate col-xs-6"
                 ng-click="deactivateCase()">
             <i class="fa fa-stop-circle"></i>
-            停止模拟
+            {{ translateNamespace + '.STOP' | translate }}
         </button>
 
         <button class="btn btn-sm btn-primary-outline btnMain col-xs-6"
                 ng-click="createNewTabToMain()">
             <i class="fa fa-tachometer"></i>
-            主界面
+            {{ translateNamespace + '.MAIN_LINK' | translate }}
         </button>
 
         <div style="font-size: 1px;"> &nbsp; </div>
@@ -50,7 +57,7 @@
 
     <p class="text-xs-center text-muted"
        ng-if="!cases||cases.length<1">
-        <small>暂无可用模拟用例</small>
+        <small>{{ translateNamespace + '.NO_USE_CASES' | translate }}</small>
     </p>
     <div class="case-list">
         <div class="sim-case text-breakall"

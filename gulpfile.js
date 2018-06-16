@@ -22,6 +22,13 @@ gulp.task('copyBower', ['clean'], ()=> {
         //angular
         'bower_components/angular/angular.min.js',
 
+        //angular-translate
+        'bower_components/angular-translate/angular-translate.min.js',
+        'bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.min.js',
+        'bower_components/angular-cookies/angular-cookies.min.js',
+        'bower_components/angular-translate-storage-cookie/angular-translate-storage-cookie.min.js',
+        'bower_components/angular-translate-storage-local/angular-translate-storage-local.min.js',
+
         //bootstrap
         'bower_components/bootstrap/dist/**/*',
 
@@ -59,7 +66,8 @@ gulp.task('copy', ['clean', 'copyBower'], ()=> {
         'css/*',
         // 'js/**/*',
         //'bower_components/**/',
-        'img/*'
+        'img/*',
+        'locales/*.json'
     ], {'base': '.'})
         .pipe(gulp.dest('dist/'));
 });
@@ -109,6 +117,7 @@ gulp.task('watch', ['build'], () => {
         'html/**/*',
         'img/**/*',
         'js/**/*',
+        'locales/*',
 
         //依赖库
         'bower.json',

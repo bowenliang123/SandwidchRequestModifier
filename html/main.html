@@ -21,6 +21,13 @@
     <!-- angular v1 -->
     <script src="../bower_components/angular/angular.min.js"></script>
 
+    <!-- angular translate -->
+    <script src="../bower_components/angular-translate/angular-translate.min.js"></script>
+    <script src="../bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.min.js"></script>
+    <script src="../bower_components/angular-cookies/angular-cookies.min.js"></script>
+    <script src="../bower_components/angular-translate-storage-cookie/angular-translate-storage-cookie.min.js"></script>
+    <script src="../bower_components/angular-translate-storage-local/angular-translate-storage-local.min.js"></script>
+
     <!--lib-->
     <script src="../bower_components/ua-parser-js/dist/ua-parser.min.js"></script>
     <script src="../bower_components/jquery-elastic/jquery.elastic.source.js"></script>
@@ -32,7 +39,7 @@
     <script src="../js/demoHeaderDescriptors.js"></script>
 </head>
 
-<body ng-controller="mainCtrl">
+<body ng-controller="mainCtrl" translate-namespace="MAIN">
 
 
 <div class="container m-t-1">
@@ -40,10 +47,12 @@
     <!--导航栏-->
     <nav class="navbar navbar-light bg-faded">
         <div class="nav navbar-nav">
-            <a class="navbar-brand" href="#">Sandwidch Request Modifier 三文治 请求修改器</a>
+            <a class="navbar-brand" href="#">{{ translateNamespace + '.TITLE' | translate }}</a>
 
             <!--日志神器-->
-            <a class="nav-item nav-link text-primary" href="logmaster.html" target="_blank">日志大师LogMaster</a>
+            <a class="nav-item nav-link text-primary" href="logmaster.html" target="_blank">
+                {{ translateNamespace + '.LOG_MASTER' | translate }}
+            </a>
         </div>
         <form class="form-inline pull-xs-right">
             <a class="nav-item nav-link text-primary" href="#" ng-if="activeCase">
@@ -57,6 +66,19 @@
                     ng-click="deactivateCase()" ng-disabled="(activeCase==undefined)">
                 <i class="fa fa-stop"></i>
             </button>
+
+            <div class="dropdown form-group">
+                <button class="btn btn-primary-outline dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fa fa-language fa-plus"></i>
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" href="#" ng-click="changeLanguage('zh')">
+                        {{ translateNamespace + '.BUTTON_LANG_ZH' | translate }}</a>
+                    <a class="dropdown-item" href="#" ng-click="changeLanguage('en')">
+                        {{ translateNamespace + '.BUTTON_LANG_EN' | translate }}</a>
+                </div>
+            </div>
+
         </form>
     </nav>
 
@@ -71,7 +93,7 @@
                 <small class="text-muted">
                     #{{showCase.caseId}}
                     <!--当前用例为空时提示文本-->
-                    <span ng-if="(showCase==undefined)">未选定用例</span>
+                    <span ng-if="(showCase==undefined)">{{ translateNamespace + '.NOT_SELECTED' | translate }}</span>
                 </small>
 
                 <!--保存按钮-->
@@ -105,9 +127,12 @@
                               ng-change="updateUaInfo()"></textarea>
                     <p class="m-a-0">
                         <small class="text-muted">
-                            <span class="m-l-1">(参考信息)</span>
-                            <span class="text-danger m-l-1">操作系统: {{uaInfo.os.name}} {{uaInfo.os.version}}</span>
-                            <span class="text-primary m-l-1">浏览器: {{uaInfo.browser.name}} {{uaInfo.browser.version}}</span>
+                            <span class="m-l-1">({{ translateNamespace + '.REF_INFO' | translate }})</span>
+                            <span class="text-danger m-l-1">
+                                {{ translateNamespace + '.OP_SYSTEM' | translate }}:
+                                {{uaInfo.os.name}} {{uaInfo.os.version}}</span>
+                            <span class="text-primary m-l-1">{{ translateNamespace + '.BROWSER' | translate }}:
+                                {{uaInfo.browser.name}} {{uaInfo.browser.version}}</span>
 
                             <span class="pull-right"
                                   ng-click="showCase.ua=''">
@@ -130,7 +155,7 @@
                               ng-model="showCase.headers"
                               ng-change="updateHeadersInfo()"></textarea>
                     <small class="text-muted">
-                        自定义 header，以冒号:分隔键值对如key:value，以换行分隔多个键值对
+                        {{ translateNamespace + '.HEADER_DESC' | translate }}
                         <span class="pull-right"
                               ng-click="showCase.headers=''">
                             <i class="fa fa-times"></i> Clear
@@ -149,7 +174,7 @@
                               placeholder="key=value"
                               ng-model="showCase.params"></textarea>
                     <small class="text-muted">
-                        自定义 GET 参数，以等号=分隔键值对如key=value，以换行分隔多个键值对
+                        {{ translateNamespace + '.GET_DESC' | translate }}
                         <span class="pull-right"
                               ng-click="showCase.params=''">
                                <i class="fa fa-times"></i> Clear
@@ -168,7 +193,7 @@
                            ng-model="showCase.targetDomains">
 
                     <small class="text-muted">
-                        作用域名关键字，以小逗号分隔关键字,例如 "helloworld,abc,xyz.com" 等
+                        {{ translateNamespace + '.KEYWORDS_DESC' | translate }}
                         <span class="pull-right"
                               ng-click="showCase.targetDomains=''">
                                <i class="fa fa-times"></i> Clear
@@ -182,7 +207,7 @@
 
             <!--header 信息-->
             <div ng-if="(headersInfo.length>0)">
-                <h5>Header 信息</h5>
+                <h5>{{ translateNamespace + '.HEADER_INFO' | translate }}</h5>
                 <div class="row"
                      ng-repeat="headerInfo in headersInfo">
 
@@ -201,9 +226,9 @@
                                ng-if="headerInfo.subFields">
                             <thead>
                             <tr>
-                                <th class="col-sm-2">字段</th>
-                                <th class="col-sm-5">当前值</th>
-                                <th class="col-sm-4">描述</th>
+                                <th class="col-sm-2">{{ translateNamespace + '.FIELD' | translate }}</th>
+                                <th class="col-sm-5">{{ translateNamespace + '.CURRENT_VALUE' | translate }}</th>
+                                <th class="col-sm-4">{{ translateNamespace + '.FIELD_DESCRIPTION' | translate }}</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -252,7 +277,7 @@
             <!--用例列表-->
             <div ng-if="!cases||cases.length<1">
                 <p class="text-xs-center text-muted">
-                    暂无可用模拟用例
+                   {{ translateNamespace + '.NOT_AVAILABLE_SIM' | translate }}
                 </p>
             </div>
             <div class="simCase"

@@ -1,0 +1,44 @@
+{
+  "MAIN": {
+    "TITLE": "Sandwidch Request Modifier",
+    "LOG_MASTER": "Log Master",
+    "NOT_SELECTED": "No selected use case",
+    "REF_INFO": "Reference Information",
+    "OP_SYSTEM": "Operating system",
+    "BROWSER": "Browser",
+    "HEADER_DESC": "customize header，with key value pairs (key:value)，separate multiple key-value pairs with new lines",
+    "GET_DESC": "customize GET Parameter, with key value pairs (key=value)，separate multiple key-value pairs with new lines",
+    "KEYWORDS_DESC": "Scope keywords, separated by small commas, for example \"helloworld,abc,xyz.com\"",
+    "HEADER_INFO": "Header information",
+    "FIELD": "Field",
+    "CURRENT_VALUE": "The current value",
+    "FIELD_DESCRIPTION": "Description",
+    "NOT_AVAILABLE_SIM": " No available use case",
+    "SUCCESSFULLY_SAVED": "Successfully saved ",
+    "NO_EMPTY": "The use case name must not be empty!",
+    "NEW_USE_CASE": "The current use case is not empty. do you want to save it ?",
+    "NEW_USE_CASE_NAME": "Enter a new use case name",
+    "BUTTON_LANG_ZH": "Chinese",
+    "BUTTON_LANG_EN": "English"
+
+  },
+  "LOG_MASTER": {
+    "TITLE": "Log Master",
+    "SORT_FIELD": "Sort by field name",
+    "SEARCH_PLACEHOLDER": "Search for the keyword",
+    "SEARCH_BUTTON": "Search",
+    "LOG_TEXT": "Log text",
+    "FIELD_SEPARATOR": "The field separator is",
+    "FIELD_SEPARATOR_EXT": "The secondary separator is",
+    "LOG_LINE": "Log line",
+    "FIELDS": "Fields"
+  },
+  "POPUP": {
+    "TITLE": "Sandwidch Request Modifier Popup",
+    "MASTER_LOG_LINK": "Go to Master log",
+    "STOP": "Stop",
+    "MAIN_LINK": "Main",
+    "NO_USE_CASES": "No available use case"
+  }
+}
+

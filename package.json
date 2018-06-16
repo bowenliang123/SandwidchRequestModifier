@@ -29,5 +29,7 @@
     "gulp-uglify": "^2.0.0",
     "gulp-zip": "^3.2.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "bower": "^1.8.4"
+  }
 }

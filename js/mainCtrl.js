@@ -4,8 +4,17 @@
 'use strict';
 
 angular.module('mainCtrl', [])
-    .controller('mainCtrl', ['$scope', 'dataService', ($scope, dataService) => {
+    .controller('mainCtrl', ['$scope', 'dataService','$translate', ($scope, dataService, $translate) => {
 
+        $scope.changeLanguage = function(langKey) {
+              $translate.use(langKey);
+              $translate(['MAIN.SUCCESSFULLY_SAVED', 'MAIN.NO_EMPTY', 'MAIN.NEW_USE_CASE', 'MAIN.NEW_USE_CASE']).then(function (translations) {
+                $scope.successfullySaved = translations['MAIN.SUCCESSFULLY_SAVED'];
+                $scope.noEmpty = translations['MAIN.NO_EMPTY'];
+                $scope.newUseCase = translations['MAIN.NEW_USE_CASE'];
+                $scope.newUseCaseName = translations['MAIN.NEW_USE_CASE_NAME'];
+                });
+            };
         /**
          * 初始化
          */
@@ -45,6 +54,12 @@ angular.module('mainCtrl', [])
             $('#headersTextarea').elastic();
             $('#getparamsTextarea').elastic();
 
+            $translate(['MAIN.SUCCESSFULLY_SAVED', 'MAIN.NO_EMPTY', 'MAIN.NEW_USE_CASE', 'MAIN.NEW_USE_CASE']).then(function (translations) {
+              $scope.successfullySaved = translations['MAIN.SUCCESSFULLY_SAVED'];
+              $scope.noEmpty = translations['MAIN.NO_EMPTY'];
+              $scope.newUseCase = translations['MAIN.NEW_USE_CASE'];
+              $scope.newUseCaseName = translations['MAIN.NEW_USE_CASE_NAME'];
+              });
         })();
 
         function getAllCases() {
@@ -363,13 +378,13 @@ angular.module('mainCtrl', [])
             }
 
             if (!$scope.showCase.name) {
-                alert('用例名称不得为空!');
+                alert($scope.noEmpty);
                 return;
             }
 
 
             if (!simCaseId) {
-                let reply = confirm('当前用例为空,是否保存为新的用例?');
+                let reply = confirm($scope.newUseCase);
                 if (!reply) {
                     return;
                 } else {
@@ -394,16 +409,16 @@ angular.module('mainCtrl', [])
                 $scope.activateCase($scope.cases[targetIndex]);
             }
 
-            alert('保存成功');
+            alert($scope.successfullySaved);
         };
 
         /**
          * 新建用例
          */
         $scope.createNewCase = () => {
-            var newCaseName = prompt('输入新建case名称', '');
+            var newCaseName = prompt($scope.newUseCaseName, '');
             if (!newCaseName) {
-                alert('呃…名称不能为空啊');
+                alert($scope.noEmpty);
                 return;
             }
             console.log(newCaseName);

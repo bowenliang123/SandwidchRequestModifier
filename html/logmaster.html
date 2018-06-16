@@ -2,7 +2,7 @@
 <html lang="en" ng-app="logmaster_app">
 <head>
     <meta charset="UTF-8">
-    <title>日志大师</title>
+    <title>{{ 'LOG_MASTER.TITLE' | translate }}</title>
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.min.css">
@@ -19,12 +19,19 @@
     <!-- angular v1 -->
     <script src="../bower_components/angular/angular.min.js"></script>
 
+    <!-- angular translate -->
+    <script src="../bower_components/angular-translate/angular-translate.min.js"></script>
+    <script src="../bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.min.js"></script>
+    <script src="../bower_components/angular-cookies/angular-cookies.min.js"></script>
+    <script src="../bower_components/angular-translate-storage-cookie/angular-translate-storage-cookie.min.js"></script>
+    <script src="../bower_components/angular-translate-storage-local/angular-translate-storage-local.min.js"></script>
+
     <!--app-->
     <script src="../js/logmaster_app.js"></script>
     <script src="../js/logmasterCtrl.js"></script>
 </head>
 
-<body ng-controller="logmasterCtrl">
+<body ng-controller="logmasterCtrl" translate-namespace="LOG_MASTER">
 
 <div class="container ">
 
@@ -32,11 +39,11 @@
     <nav class="navbar navbar-light bg-faded m-y-1">
 
         <div class="nav navbar-nav">
-            <a class="navbar-brand " href="#">LogMaster 日志大师</a>
+            <a class="navbar-brand " href="#">{{ translateNamespace + '.TITLE' | translate }}</a>
 
             <!--是否排序-->
             <a class="nav-item nav-link active text-primary" href="#" ng-click="isSort=!isSort;updateLogText();">
-                是否按字段名排序: {{isSort}}</a>
+                {{ translateNamespace + '.SORT_FIELD' | translate }}: {{isSort}}</a>
 
             <!--pagination 快速跳转-->
             <a ng-repeat="logCase in logCases"
@@ -44,29 +51,29 @@
         </div>
 
         <form class="form-inline pull-lg-right">
-            <input class="form-control" type="text" placeholder="搜索关键字" ng-model="queryTextInput">
-            <button class="btn btn-success" ng-click="queryText=queryTextInput">搜索</button>
+            <input class="form-control" type="text" placeholder="{{ translateNamespace + '.SEARCH_PLACEHOLDER' | translate }}" ng-model="queryTextInput">
+            <button class="btn btn-success" ng-click="queryText=queryTextInput">{{ translateNamespace + '.SEARCH_BUTTON' | translate }}</button>
         </form>
     </nav>
 
 
     <!--日志文本-->
     <textarea class="form-control  text-breakall" id="logTextTextarea" rows="8" style="word-break: break-all"
-              placeholder="日志文本"
+              placeholder="{{ translateNamespace + '.LOG_TEXT' | translate }}"
               ng-model="logText"
               ng-change="updateLogText()"
     ></textarea>
 
     <div class="row">
         <!--分隔符提示-->
-        <p class="text-muted">字段分隔符为 <span class="text-danger font-weight-bold">{{MAIN_SEPERATOR}}</span> ,
-            次要分隔符为 <span class="text-danger font-weight-bold">{{SUB_SEPERATOR}}</span> 。</p>
+        <p class="text-muted">{{ translateNamespace + '.FIELD_SEPARATOR' | translate }} <span class="text-danger font-weight-bold">{{MAIN_SEPERATOR}}</span>
+        {{ translateNamespace + '.FIELD_SEPARATOR_EXT' | translate }}<span class="text-danger font-weight-bold">{{SUB_SEPERATOR}}</span> 。</p>
     </div>
     <!--解析后日志-->
     <div ng-repeat="logCase in logCases" id="logCase{{$index+1}}" class="m-y-2">
         <h5 class="m-y-1">
-            日志行 #{{$index+1}}
-            <small class="text-muted"> {{logCase.params.length}}个字段</small>
+            {{ translateNamespace + '.LOG_LINE' | translate }} #{{$index+1}}
+            <small class="text-muted"> {{logCase.params.length}}{{ translateNamespace + '.FIELDS' | translate }}</small>
         </h5>
 
         <div ng-repeat="param in logCase.params track by $index"

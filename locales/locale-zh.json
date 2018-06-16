@@ -1,0 +1,44 @@
+{
+  "MAIN": {
+    "TITLE": "Sandwidch Request Modifier",
+    "LOG_MASTER": "日志大师",
+    "NOT_SELECTED": "未选定用例",
+    "REF_INFO": "参考信息",
+    "OP_SYSTEM": "操作系统",
+    "BROWSER": "浏览器",
+    "HEADER_DESC": "自定义 header，以冒号:分隔键值对如key:value，以换行分隔多个键值对",
+    "GET_DESC": "自定义 GET 参数，以等号=分隔键值对如key=value，以换行分隔多个键值对",
+    "KEYWORDS_DESC": "作用域名关键字，以小逗号分隔关键字,例如 \"helloworld,abc,xyz.com\" 等",
+    "HEADER_INFO": "Header 信息",
+    "FIELD": "字段",
+    "CURRENT_VALUE": "当前值",
+    "FIELD_DESCRIPTION": "描述",
+    "NOT_AVAILABLE_SIM": "暂无可用模拟用例",
+    "SUCCESSFULLY_SAVED": "保存成功",
+    "NO_EMPTY": "用例名称不得为空!",
+    "NEW_USE_CASE": "当前用例为空,是否保存为新的用例?",
+    "NEW_USE_CASE_NAME": "输入新建case名称",
+    "BUTTON_LANG_ZH": "Chinese",
+    "BUTTON_LANG_EN": "English"
+
+  },
+  "LOG_MASTER": {
+    "TITLE": "日志大师",
+    "SORT_FIELD": "是否按字段名排序",
+    "SEARCH_PLACEHOLDER": "搜索关键字",
+    "SEARCH_BUTTON": "搜索",
+    "LOG_TEXT": "日志文本",
+    "FIELD_SEPARATOR": "字段分隔符为",
+    "FIELD_SEPARATOR_EXT": "次要分隔符为",
+    "LOG_LINE": "日志行",
+    "FIELDS": "个字段"
+  },
+  "POPUP": {
+    "TITLE": "Sandwidch Request Modifier Popup",
+    "MASTER_LOG_LINK": "Goto 日志大师",
+    "STOP": "停止模拟",
+    "MAIN_LINK": "主界面",
+    "NO_USE_CASES": "暂无可用模拟用例"
+  }
+}
+
